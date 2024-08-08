@@ -1,6 +1,7 @@
 import { Box, Button, Flex, HStack, Input, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import CustomMenu from './components/CustomMenu';
+import MapView from './components/MapView';
 
 function Header() {
   return (
@@ -86,16 +87,6 @@ function InfoCard() {
       zIndex={2}
     >
       <Text fontWeight="bold" mt={2}>충전소 정보 카드</Text>
-    </Box>
-  );
-}
-
-function MapView() {
-  return (
-    <Box position="relative" width="100%" height="calc(100vh - 60px)" bg="gray.200">
-      <Text position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)">
-        지도
-      </Text>
     </Box>
   );
 }
