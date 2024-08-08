@@ -1,5 +1,5 @@
 import { Box, Button, VStack, Text } from '@chakra-ui/react';
-import UserInput from './components/UserInput';
+import UserInput from './components/Input';
 import PasswordInput from './components/PasswordInput';
 import { Link } from 'react-router-dom';
 

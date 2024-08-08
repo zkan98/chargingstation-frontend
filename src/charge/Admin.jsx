@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Box, Button, Flex, HStack, Text } from '@chakra-ui/react';
-import UserTable from './components/UserTable';
+import UserTable from './components/Table';
 
 // 샘플
 const userList = [

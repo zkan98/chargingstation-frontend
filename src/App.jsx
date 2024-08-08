@@ -2,11 +2,11 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Main from './charge/MainPage.jsx';
-import Login from './user/Login.jsx';
-import Join from './user/Join.jsx';
-import MyPage from './user/MyPage.jsx';
-import Admin from './user/Admin.jsx'
-import Owner from './owner/Owner.jsx'
+import Login from './charge/Login.jsx';
+import Join from './charge/Join.jsx';
+import MyPage from './charge/MyPage.jsx';
+import Admin from './charge/Admin.jsx';
+import Owner from './charge/Owner.jsx';
 
 function App() {
   return (
@@ -25,6 +25,7 @@ function App() {
         <Route path="/admin" element={<Admin />} />
 
         <Route path="/owner" element={<Owner />} />
+
         
         </Routes>
       </Router>
