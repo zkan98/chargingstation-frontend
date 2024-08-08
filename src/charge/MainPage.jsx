@@ -1,25 +1,6 @@
-import { Box, Button, Flex, HStack, Input, Text } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Box, Flex, HStack, Input, Text } from '@chakra-ui/react';
 import CustomMenu from './components/CustomMenu';
-
-function Header() {
-  return (
-    <Flex
-      bg="white"
-      p={4}
-      borderBottom="1px solid #e2e8f0"
-      align="center"
-      justify="space-between"
-      width="100%"
-      zIndex={1}
-    >
-      <Text fontSize="xl" fontWeight="bold" ml={3}>7team</Text>
-      <HStack spacing={4}>
-      <Button as={Link} to="/login" colorScheme="gray" variant="outline">로그인</Button>
-      </HStack>
-    </Flex>
-  );
-}
+import Header from './components/Header';
 
 function Navbar() {
   const menuItems = {
@@ -100,7 +81,7 @@ function MapView() {
   );
 }
 
-function App() {
+function MainPage() {
   return (
     <Box minH="100vh" bg="gray.100">
       <Header />
@@ -114,4 +95,4 @@ function App() {
   );
 }
 
-export default App;
+export default MainPage;
