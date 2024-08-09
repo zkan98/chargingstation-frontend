@@ -39,19 +39,30 @@ const Owner = () => {
       return <OwnerTable data={chargingStationList} caption="Charging Station List" />;
     } else if (selectedView === 'addChargingStation') {
       return (
-        <VStack spacing={4} width="400px">
-          <OwnerInput placeholder="이름" name="name" value={inputValues.name} onChange={handleInputChange} />
-          <OwnerInput placeholder="주소" name="address" value={inputValues.address} onChange={handleInputChange} />
-          <OwnerInput placeholder="가격" name="price" value={inputValues.price} onChange={handleInputChange} />
-          <OwnerInput placeholder="위도" name="latitude" value={inputValues.latitude} onChange={handleInputChange} />
-          <OwnerInput placeholder="경도" name="longitude" value={inputValues.longitude} onChange={handleInputChange} />
-          <ConnectType placeholder="커넥트타입" name="connector" value={inputValues.connector} onChange={handleInputChange} />
-          <OwnerInput placeholder="요금" name="fee" value={inputValues.fee} onChange={handleInputChange} />
-          <Button colorScheme="blue">추가</Button>
-        </VStack>
+        <Flex
+          align="center"
+          justify="center"
+          width="100%"
+          height="100%"
+          p={4}
+        >
+          <VStack spacing={4} width="400px" bg="white" p={4} borderRadius="md" boxShadow="md">
+            <OwnerInput placeholder="이름" name="name" value={inputValues.name} onChange={handleInputChange} />
+            <OwnerInput placeholder="주소" name="address" value={inputValues.address} onChange={handleInputChange} />
+            <OwnerInput placeholder="위도" name="latitude" value={inputValues.latitude} onChange={handleInputChange} />
+            <OwnerInput placeholder="경도" name="longitude" value={inputValues.longitude} onChange={handleInputChange} />
+            <OwnerInput placeholder="kWh당 가격" name="price" value={inputValues.price} onChange={handleInputChange} />
+            <OwnerInput placeholder="슬롯 수" name="slot" value={inputValues.slot} onChange={handleInputChange} />
+            <ConnectType placeholder="커넥트타입" name="connector" value={inputValues.connector} onChange={handleInputChange} />
+            <OwnerInput placeholder="충전속도" name="cspeed" value={inputValues.cspeed} onChange={handleInputChange} />
+            <OwnerInput placeholder="충전요금" name="cfee" value={inputValues.cfee} onChange={handleInputChange} />
+            <OwnerInput placeholder="주차요금" name="pfee" value={inputValues.pfee} onChange={handleInputChange} />
+            <Button colorScheme="blue">추가</Button>
+          </VStack>
+        </Flex>
       );
     } else {
-      return <Box>Select an option from the navigation bar.</Box>;
+      return <Box></Box>;
     }
   };
 
@@ -69,9 +80,9 @@ const Owner = () => {
         mb={4}
         mt="80px"
       >
-        <HStack spacing={8}>
+        <HStack spacing={2}>
           <Button onClick={() => handleButtonClick('chargingStationList')}>충전소목록</Button>
-          <Button onClick={() => handleButtonClick('addChargingStation')}>충전소추가</Button>
+          <Button onClick={() => handleButtonClick('addChargingStation')}>충전소추가/수정</Button>
         </HStack>
       </Flex>
       <Box p={4}>

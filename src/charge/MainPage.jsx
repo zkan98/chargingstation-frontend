@@ -46,7 +46,7 @@ function SearchBar() {
       boxShadow="md"
       position="absolute"
       top="20px"
-      left="20px"
+      right="20px"
       zIndex={2}
     >
       <Input placeholder="충전소 검색" size="lg" />
@@ -64,7 +64,7 @@ function InfoCard() {
       width="400px"
       position="absolute"
       top="100px"
-      left="20px"
+      right="20px"
       zIndex={2}
     >
       <Text fontWeight="bold" mt={2}>충전소 정보 카드</Text>
@@ -74,7 +74,7 @@ function InfoCard() {
 
 function MainPage() {
   return (
-    <Box minH="100vh" bg="gray.100">
+    <Box minH="100vh" bg="gray.100" pt={0}>
       <Header />
       <Navbar />
       <Box position="relative">

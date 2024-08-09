@@ -3,6 +3,8 @@ import { Box, Button, VStack, Text, useToast } from '@chakra-ui/react';
 import UserInput from './components/Input';
 import PasswordInput from './components/PasswordInput';
 import ConnectType from './components/ConnectType';
+import ChooseOne from './components/ChooseOne';
+
 
 function Join() {
   const [formData, setFormData] = useState({
@@ -12,6 +14,7 @@ function Join() {
     confirmPassword: '',
     address: '',
     connectType: '',
+    userType: 'option1',
   });
 
   const toast = useToast();
@@ -21,6 +24,13 @@ function Join() {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+  };
+
+  const handleUserTypeChange = (value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      userType: value,
     }));
   };
 
@@ -39,7 +49,7 @@ function Join() {
 
     try {
       // API 요청
-      const response = await fetch('https://api.yourbackend.com/signup', {
+      const response = await fetch('/join', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -123,6 +133,7 @@ function Join() {
           value={formData.connectType}
           onChange={handleChange}
         />
+        <ChooseOne value={formData.userType} onChange={handleUserTypeChange} />
         <br />
         <Button colorScheme="blue" width="100%" type="submit">
           회원가입
