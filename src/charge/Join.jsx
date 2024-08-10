@@ -4,7 +4,7 @@ import UserInput from './components/Input';
 import PasswordInput from './components/PasswordInput';
 import ConnectType from './components/ConnectType';
 import ChooseOne from './components/ChooseOne';
-
+import Address from './components/Address';
 
 function Join() {
   const [formData, setFormData] = useState({
@@ -13,6 +13,7 @@ function Join() {
     password: '',
     confirmPassword: '',
     address: '',
+    detailAddress: '',
     connectType: '',
     userType: 'option1',
   });
@@ -34,6 +35,13 @@ function Join() {
     }));
   };
 
+  const handleAddressChange = (address) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      address: address,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -48,7 +56,6 @@ function Join() {
     }
 
     try {
-      // API 요청
       const response = await fetch('/join', {
         method: 'POST',
         headers: {
@@ -61,14 +68,12 @@ function Join() {
         throw new Error('회원가입 실패');
       }
 
-      // 성공 시 처리
       toast({
         title: '회원가입이 완료되었습니다.',
         status: 'success',
         duration: 3000,
         isClosable: true,
       });
-      // 가입 성공 후 추가 작업 (예: 로그인 페이지로 이동)
     } catch (error) {
       toast({
         title: '회원가입 중 오류가 발생했습니다.',
@@ -121,10 +126,22 @@ function Join() {
           value={formData.confirmPassword}
           onChange={handleChange}
         />
+        <Address setAddress={handleAddressChange} />
+        <Box
+          border="1px solid"
+          borderColor="gray.300"
+          borderRadius="md"
+          p={2}
+          width="100%"
+        >
+          <Text fontSize="md" color="gray.600">
+            {formData.address || '기본 주소'}
+          </Text>
+        </Box>
         <UserInput
-          placeholder="주소입력"
-          name="address"
-          value={formData.address}
+          placeholder="상세 주소"
+          name="detailAddress"
+          value={formData.detailAddress}
           onChange={handleChange}
         />
         <ConnectType

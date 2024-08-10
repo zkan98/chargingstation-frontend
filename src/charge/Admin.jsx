@@ -1,65 +1,77 @@
 import { useState } from 'react';
-import { Box, Button, Flex, HStack, Text } from '@chakra-ui/react';
-import UserTable from './components/Table';
+import { Box, Text, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react';
+import TableList from './components/TableList';
 
-// 샘플
+// 샘플 데이터
 const userList = [
-  { from: 'User1', to: 'Email1', factor: 'Active' },
-  { from: 'User2', to: 'Email2', factor: 'Inactive' }
+  { id: 'User1', email: 'user1@example.com', connectorType: 'Type1', userType: '일반' },
+  { id: 'User2', email: 'user2@example.com', connectorType: 'Type2', userType: '사업자' }
 ];
 
 const chargingStationList = [
-  { from: 'Station1', to: 'Location1', factor: '10 chargers' },
-  { from: 'Station2', to: 'Location2', factor: '20 chargers' }
-];
-
-const chargingStationOperatorList = [
-  { from: 'Operator1', to: 'Contact1', factor: 'Region1' },
-  { from: 'Operator2', to: 'Contact2', factor: 'Region2' }
+  { name: 'Station1', address: 'Location1', slot: '10', connectorType: 'Type1' },
+  { name: 'Station2', address: 'Location2', slot: '20', connectorType: 'Type2' }
 ];
 
 const Admin = () => {
-  const [selectedTable, setSelectedTable] = useState('');
-
-  const handleButtonClick = (tableName) => {
-    setSelectedTable(tableName);
-  };
+  const [selectedTable, setSelectedTable] = useState('userList');
 
   const renderTable = () => {
     switch (selectedTable) {
       case 'userList':
-        return <UserTable data={userList} caption="User List" />;
+        return (
+          <TableList
+            data={userList}
+            caption=""
+            columns={[
+              { header: '아이디', accessor: 'id' },
+              { header: '이메일', accessor: 'email' },
+              { header: '커넥트 타입', accessor: 'connectorType' },
+              { header: '유저 타입', accessor: 'userType' }
+            ]}
+          />
+        );
       case 'chargingStationList':
-        return <UserTable data={chargingStationList} caption="Charging Station List" />;
-      case 'chargingStationOperatorList':
-        return <UserTable data={chargingStationOperatorList} caption="Charging Station Operator List" />;
+        return (
+          <TableList
+            data={chargingStationList}
+            caption=""
+            columns={[
+              { header: '충전소 이름', accessor: 'name' },
+              { header: '주소', accessor: 'address' },
+              { header: '슬롯 수', accessor: 'slot' },
+              { header: '커넥트 타입', accessor: 'connectorType' }
+            ]}
+          />
+        );
       default:
-        return <Box>Select a category to view data.</Box>;
+        return <Box></Box>;
     }
   };
 
   return (
     <Box>
-      <Text textAlign="center" fontSize="2xl" fontWeight="bold" mb={4}>Admin Page</Text>
-      <Flex
-        bg="gray.100"
-        p={4}
-        borderBottom="1px solid #e2e8f0"
-        align="center"
-        justify="center"
-        width="100%"
-        zIndex={1}
+      <Text textAlign="center" fontSize="2xl" fontWeight="bold" mb={4}>
+        Admin
+      </Text>
+      <Tabs
+        isFitted
+        variant="enclosed"
+        onChange={(index) => {
+          const tableNames = ['userList', 'chargingStationList'];
+          setSelectedTable(tableNames[index]);
+        }}
         mb={4}
       >
-        <HStack spacing={60}>
-          <Button onClick={() => handleButtonClick('userList')}>유저목록</Button>
-          <Button onClick={() => handleButtonClick('chargingStationList')}>충전소목록</Button>
-          <Button onClick={() => handleButtonClick('chargingStationOperatorList')}>충전소사업자목록</Button>
-        </HStack>
-      </Flex>
-      <Box p={4}>
-        {renderTable()}
-      </Box>
+        <TabList>
+          <Tab>일반 이용자 목록</Tab>
+          <Tab>충전소 목록</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>{selectedTable === 'userList' && renderTable()}</TabPanel>
+          <TabPanel>{selectedTable === 'chargingStationList' && renderTable()}</TabPanel>
+        </TabPanels>
+      </Tabs>
     </Box>
   );
 };

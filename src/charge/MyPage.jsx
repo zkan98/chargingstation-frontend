@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Box, Button, VStack, useToast,Flex } from '@chakra-ui/react';
+import { Box, Button, VStack, useToast, Flex, Text } from '@chakra-ui/react';
 import UserInput from './components/Input';
 import PasswordInput from './components/PasswordInput';
 import ConnectType from './components/ConnectType';
 import Header from './components/Header';
+import Address from './components/Address';
+
 
 function MyPage() {
     const [formData, setFormData] = useState({
@@ -33,6 +35,13 @@ function MyPage() {
       setFormData((prevData) => ({
         ...prevData,
         [name]: value,
+      }));
+    };
+
+    const handleAddressChange = (address) => {
+      setFormData((prevData) => ({
+        ...prevData,
+        address: address,
       }));
     };
   
@@ -122,6 +131,7 @@ function MyPage() {
             name="username"
             value={formData.username}
             onChange={handleChange}
+            isReadOnly 
             />
             <UserInput
             placeholder="E-mail"
@@ -141,10 +151,22 @@ function MyPage() {
             value={formData.confirmPassword}
             onChange={handleChange}
             />
+            <Address setAddress={handleAddressChange} />
+            <Box
+            border="1px solid"
+            borderColor="gray.300"
+            borderRadius="md"
+            p={2}
+            width="100%"
+            >
+            <Text fontSize="md" color="gray.600">
+            {formData.address || '기본 주소'}
+            </Text>
+            </Box>
             <UserInput
-            placeholder="주소입력"
-            name="address"
-            value={formData.address}
+            placeholder="상세 주소"
+            name="detailAddress"
+            value={formData.detailAddress}
             onChange={handleChange}
             />
             <ConnectType
