@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Box } from '@chakra-ui/react';
 import debounce from 'lodash/debounce';
 
-function MapView() {
+function MapView({ setChargerData }) {
   const mapContainer = useRef(null); // 지도를 담을 DOM 요소를 참조합니다.
   const mapRef = useRef(null); // 지도 객체를 참조합니다
   const markersRef = useRef([]); // 마커 배열을 참조합니다
@@ -46,6 +46,7 @@ function MapView() {
             }
 
             const data = await response.json();
+            setChargerData(data);
 
             // 기존 마커 제거
             markersRef.current.forEach(marker => marker.setMap(null));
@@ -73,7 +74,7 @@ function MapView() {
           } catch (error) {
             console.error('충전소 데이터를 불러오는 중 에러가 발생하였습니다:', error);
           }
-        }, 500); // 0.5초 동안의 디바운스 설정
+        }, 300); // 0.5초 동안의 디바운스 설정
 
         // 지도 중앙 위치 변경 이벤트 리스너 등록
         window.naver.maps.Event.addListener(map, 'bounds_changed', updateMarkers);

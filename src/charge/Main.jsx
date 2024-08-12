@@ -7,6 +7,8 @@ import ConnectorCard from './components/ConnectorCard';
 import KwCard from './components/KwCard';
 import FeeCard from './components/FeeCard';
 import ParkingCard from './components/ParkingCard';
+import Charge from './components/Charge';
+import ChargeDetail from './components/ChargeDetail';
 
 function Main() {
   const {
@@ -26,8 +28,8 @@ function Main() {
   } = useDisclosure();
 
   const [cardPosition, setCardPosition] = useState({ top: '0', left: '0' });
-
   const [openCard, setOpenCard] = useState(null); // 현재 열린 카드 상태를 관리
+  const [chargerData, setChargerData] = useState([]);
 
   const connectorButtonRef = useRef(null);
   const locationButtonRef = useRef(null);
@@ -82,7 +84,6 @@ function Main() {
         position="relative"
         justify="start"
         gap={4}
-        mb={4}
       >
         <Button
           variant="outline"
@@ -182,9 +183,9 @@ function Main() {
       )}
 
       <Box position="relative">
-        <MapView />
+        <MapView setChargerData={setChargerData} />
         <SearchBar />
-        <InfoCard />
+        <InfoCard chargerData={chargerData} />
       </Box>
     </Box>
   );
@@ -208,7 +209,10 @@ function SearchBar() {
   );
 }
 
-function InfoCard() {
+function InfoCard({ chargerData }) {
+  const [currentView, setCurrentView] = useState('charge'); // 기본 뷰를 'charge'로 설정
+  const [selectedStatId, setSelectedStatId] = useState(null); // 선택된 충전소 ID 상태
+
   return (
     <Box
       p={4}
@@ -221,7 +225,19 @@ function InfoCard() {
       right="20px"
       zIndex={2}
     >
-      <Text fontWeight="bold" mt={2}>충전소 정보 카드</Text>
+      {currentView === 'charge' && (
+              <Charge
+                setCurrentView={setCurrentView}
+                setSelectedStatId={setSelectedStatId}
+                chargerData={chargerData}
+              />
+            )}
+            {currentView === 'chargeDetail' && selectedStatId && (
+              <ChargeDetail
+                statId={selectedStatId}
+                setCurrentView={setCurrentView}
+              />
+            )}
     </Box>
   );
 }

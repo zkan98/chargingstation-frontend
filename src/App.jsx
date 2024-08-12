@@ -28,7 +28,7 @@ function App() {
         <Route path="/owner" element={<Owner />} />
 
 <Route path="/l" element={<LocationFilter />} />
-        
+
         </Routes>
       </Router>
 

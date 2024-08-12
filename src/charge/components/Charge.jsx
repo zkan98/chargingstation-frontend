@@ -1,27 +1,73 @@
+import React, { useState } from 'react';
 import { Box, Button, Text, VStack, HStack, Badge, Link } from '@chakra-ui/react';
 
-const Charge = ({ setCurrentView }) => {
+const Charge = ({ setCurrentView, setSelectedStatId, chargerData }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const ITEMS_PER_PAGE = 5;
+  const totalPages = Math.ceil(chargerData.length / ITEMS_PER_PAGE);
+
+  // 현재 페이지에 표시될 데이터
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedData = chargerData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
   return (
-    <Box
-      borderWidth="1px"
-      borderRadius="lg"
-      overflow="hidden"
-      p={4}
-      width="300px"
-      boxShadow="md"
-      bg="white"
-    >
-      <VStack align="start" spacing={3}>
-        <Badge colorScheme="gray" variant="solid">사업자</Badge>
-        <Link onClick={() => setCurrentView('chargeDetail')} fontSize="xl" fontWeight="bold" cursor="pointer">
-          충전소이름
-        </Link>
-        <Button width="100%" colorScheme="gray" variant="outline">
-          <HStack justify="space-between" width="100%">
-            <Text>속도 | 요금</Text>
-          </HStack>
+    <Box>
+      {paginatedData.length > 0 ? (
+        paginatedData.map((data) => (
+          <Box
+            key={data.statId}
+            borderWidth="1px"
+            borderRadius="lg"
+            overflow="hidden"
+            p={4}
+            width="300px"
+            boxShadow="md"
+            bg="white"
+            mb={4}
+          >
+            <VStack align="start" spacing={3}>
+              <Badge colorScheme="gray" variant="solid">{data.busiNm}</Badge>
+              <Link
+                onClick={() => {
+                  setSelectedStatId(data.statId);
+                  setCurrentView('chargeDetail');
+                }}
+                fontSize="xl"
+                fontWeight="bold"
+                cursor="pointer"
+              >
+                {data.statNm}
+              </Link>
+              <Button width="100%" colorScheme="gray" variant="outline">
+                <HStack justify="space-between" width="100%">
+                  <Text>{data.output}kW | {data.chargingFee ?? '정보 없음'}원/kWh</Text>
+                </HStack>
+              </Button>
+            </VStack>
+          </Box>
+        ))
+      ) : (
+        <Text>충전소 데이터가 없습니다.</Text>
+      )}
+
+      <HStack spacing={4} justify="center" mt={4}>
+        <Button
+          onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))}
+          isDisabled={currentPage === 1}
+        >
+          이전
         </Button>
-      </VStack>
+        <Text>
+          {currentPage} / {totalPages}
+        </Text>
+        <Button
+          onClick={() => setCurrentPage((page) => Math.min(page + 1, totalPages))}
+          isDisabled={currentPage === totalPages}
+        >
+          다음
+        </Button>
+      </HStack>
     </Box>
   );
 };
