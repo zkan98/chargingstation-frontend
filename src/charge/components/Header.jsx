@@ -1,17 +1,35 @@
 import { useState } from 'react';
 import { Flex, HStack, Text, Button } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // 로그인 상태
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   //const [userType, setUserType] = useState('user');  // 'user' 또는 'owner'
+  const navigate = useNavigate();
 
   //const useEffect(() => {
   //  fetchUserData().then(data => setUserType(data.userType));
   //}, []);
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/logout', {
+        method: 'POST', // 또는 'GET' 등 백엔드에 맞는 HTTP 메서드 사용
+        credentials: 'include', // 쿠키를 포함해서 보낼 경우
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        setIsLoggedIn(false);
+        navigate('/');
+      } else {
+        console.error('Failed to log out');
+      }
+    } catch (error) {
+      console.error('An error occurred during logout:', error);
+    }
   };
 
   return (

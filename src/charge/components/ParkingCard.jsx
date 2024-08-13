@@ -1,8 +1,22 @@
+import { useState } from 'react';
 import { Box, Button, SimpleGrid, Tag, IconButton, Divider, Heading } from '@chakra-ui/react';
-import { CloseIcon } from '@chakra-ui/icons';
+import { CloseIcon, RepeatIcon } from '@chakra-ui/icons';
 
-const ParkingCard = ({ onClose }) => {  // onClose prop을 추가합니다.
-  const tags = ['무료','유료'];
+const ParkingCard = ({ onClose }) => {
+  const tags = ['무료', '유료'];
+
+  // 선택된 태그를 저장하는 상태 변수
+  const [selectedTag, setSelectedTag] = useState(null);
+
+  // 태그 클릭 시 선택 처리 함수
+  const handleTagClick = (tag) => {
+    setSelectedTag(prevTag => prevTag === tag ? null : tag);
+  };
+
+  // 초기화 함수
+  const handleReset = () => {
+    setSelectedTag(null);
+  };
 
   return (
     <Box
@@ -10,21 +24,20 @@ const ParkingCard = ({ onClose }) => {  // onClose prop을 추가합니다.
       borderWidth="1px"
       borderRadius="lg"
       boxShadow="md"
-      maxW="sm"
+      width="400px"
       margin="auto"
       bg="white"
     >
-      {/* Header with title and close icon */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Heading as="h3" size="md">
-          커넥터
+          주차요금
         </Heading>
         <IconButton
           icon={<CloseIcon />}
           variant="ghost"
           size="sm"
           aria-label="Close"
-          onClick={onClose}  // 클릭 시 onClose 호출
+          onClick={onClose}
         />
       </Box>
       <Divider />
@@ -36,12 +49,13 @@ const ParkingCard = ({ onClose }) => {  // onClose prop을 추가합니다.
             key={tag}
             size="lg"
             variant="solid"
-            bg="gray.100"
-            color="black"
+            bg={selectedTag === tag ? 'teal.500' : 'gray.100'}
+            color={selectedTag === tag ? 'white' : 'black'}
             textAlign="center"
             justifyContent="center"
             p={2}
             cursor="pointer"
+            onClick={() => handleTagClick(tag)} // 클릭 시 태그 선택
           >
             {tag}
           </Tag>
@@ -50,11 +64,18 @@ const ParkingCard = ({ onClose }) => {  // onClose prop을 추가합니다.
       <Divider />
 
       {/* Buttons */}
-      <Box display="flex" justifyContent="space-between" mt={4}>
-        <Button variant="outline" colorScheme="gray">
-          초기화
+      <Box display="flex" justifyContent="flex-end" mt={4}>
+        <Button
+          variant="outline"
+          colorScheme="gray"
+          onClick={handleReset} // 초기화 버튼 클릭 시 초기화 처리
+          leftIcon={<RepeatIcon />}
+          mr={2}
+        >
         </Button>
-        <Button colorScheme="blue">적용</Button>
+        <Button colorScheme="blue">
+          적용
+        </Button>
       </Box>
     </Box>
   );
