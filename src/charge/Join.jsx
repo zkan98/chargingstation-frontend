@@ -56,7 +56,7 @@ function Join() {
     }
 
     try {
-      const response = await fetch('/join', {
+      const response = await fetch('/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

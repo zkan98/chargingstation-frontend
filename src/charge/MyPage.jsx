@@ -22,12 +22,43 @@ function MyPage() {
       // 실제로는 API를 호출하여 데이터를 가져와야 합니다.
       // 아래는 예시 데이터입니다.
       const fetchUserData = async () => {
-        const data = await fetch('/api/user-info').then((res) => res.json());
+        const data = await fetch('/users/info').then((res) => res.json());
         setFormData(data);
       };
   
       fetchUserData();
     }, []);
+
+//     const fetchUserData = async () => {
+//       // 쿠키에서 토큰을 가져오는 함수
+//       const getCookie = (name) => {
+//         const value = `; ${document.cookie}`;
+//         const parts = value.split(`; ${name}=`);
+//         if (parts.length === 2) return parts.pop().split(';').shift();
+//       };
+//
+//       const token = getCookie('accessToken'); // 쿠키에서 'accessToken' 가져오기
+//
+//       // API 요청
+//       const response = await fetch('/api/user-info', {
+//         method: 'GET',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authorization': `Bearer ${token}` // Authorization 헤더에 토큰 추가
+//         }
+//       });
+//
+//       if (response.ok) {
+//         const data = await response.json();
+//         setFormData(data);
+//       } else {
+//         // 오류 처리
+//         console.error('회원 정보를 불러오는 중 오류가 발생했습니다.');
+//       }
+//     };
+
+
+
   
     // 정보 수정 핸들러
     const handleChange = (e) => {
@@ -49,7 +80,7 @@ function MyPage() {
     const handleSave = async () => {
       try {
         // API 요청
-        const response = await fetch('/api/update-user', {
+        const response = await fetch('/users/mypage/update', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -85,7 +116,7 @@ function MyPage() {
       if (confirmDelete) {
         try {
           // API 요청
-          const response = await fetch('/api/delete-user', {
+          const response = await fetch('/users/mypage/delete', {
             method: 'DELETE',
           });
   
