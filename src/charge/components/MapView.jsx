@@ -1,11 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, memo } from 'react';
 import { Box } from '@chakra-ui/react';
 import debounce from 'lodash/debounce';
+import { useNavigate } from 'react-router-dom';
 
-function MapView() {
+const MapView = memo(({ setChargerData }) => {
   const mapContainer = useRef(null); // 지도를 담을 DOM 요소를 참조합니다.
   const mapRef = useRef(null); // 지도 객체를 참조합니다
   const markersRef = useRef([]); // 마커 배열을 참조합니다
+  const navigate = useNavigate(); // 페이지 이동을 위한 navigate 훅
 
   useEffect(() => {
     // 네이버 맵 스크립트 로드
@@ -46,6 +48,7 @@ function MapView() {
             }
 
             const data = await response.json();
+            setChargerData(data);
 
             // 기존 마커 제거
             markersRef.current.forEach(marker => marker.setMap(null));
@@ -59,13 +62,15 @@ function MapView() {
                 title: charger.statNm,
               });
 
-              // 마커 클릭 시 정보창 표시 (임시)
-              const infoWindow = new window.naver.maps.InfoWindow({
-                content: `<div style="width:150px;text-align:center;padding:5px;">${charger.statNm}</div>`,
-              });
-
+              // 마커 클릭 시 정보창 표시 및 클로즈업
               window.naver.maps.Event.addListener(marker, 'click', () => {
-                infoWindow.open(mapRef.current, marker);
+                // 정보창을 열거나 다른 방식으로 ChargerDetail 정보 표시
+                // 이 예제에서는 페이지 이동을 사용합니다.
+                navigate(`/charge/place/${charger.statId}`);
+
+                // 마커 위치로 지도 중심 이동 및 줌 레벨 조정
+                mapRef.current.setCenter(marker.getPosition());
+                mapRef.current.setZoom(14);
               });
 
               markersRef.current.push(marker); // 마커 배열에 추가
@@ -73,7 +78,7 @@ function MapView() {
           } catch (error) {
             console.error('충전소 데이터를 불러오는 중 에러가 발생하였습니다:', error);
           }
-        }, 500); // 0.5초 동안의 디바운스 설정
+        }, 300); // 0.3초 동안의 디바운스 설정
 
         // 지도 중앙 위치 변경 이벤트 리스너 등록
         window.naver.maps.Event.addListener(map, 'bounds_changed', updateMarkers);
@@ -95,6 +100,6 @@ function MapView() {
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }}></div>
     </Box>
   );
-}
+});
 
 export default MapView;

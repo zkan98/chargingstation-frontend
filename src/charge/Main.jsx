@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { Outlet } from 'react-router-dom';
 import { Box, Flex, Button, Text, Input, useDisclosure } from '@chakra-ui/react';
 import Header from './components/Header';
 import MapView from './components/MapView';
@@ -8,6 +9,9 @@ import KwCard from './components/KwCard';
 import FeeCard from './components/FeeCard';
 import ParkingCard from './components/ParkingCard';
 import CompanyCard from './components/CompanyCard';
+import InfoCard from './components/InfoCard';
+import SearchBar from './components/SearchBar';
+
 
 function Main() {
   const {
@@ -31,6 +35,7 @@ function Main() {
 
   const [cardPosition, setCardPosition] = useState({ top: '0', left: '0' });
   const [openCard, setOpenCard] = useState(null); // 현재 열린 카드 상태를 관리
+  const [chargerData, setChargerData] = useState([]);
 
   const connectorButtonRef = useRef(null);
   const locationButtonRef = useRef(null);
@@ -101,7 +106,6 @@ function Main() {
         position="relative"
         justify="start"
         gap={4}
-        mb={4}
       >
         <Button
           variant="outline"
@@ -226,48 +230,13 @@ function Main() {
       )}
 
       <Box position="relative">
-        <MapView />
+        <MapView setChargerData={setChargerData} />
         <SearchBar />
-        <InfoCard />
+        <InfoCard chargerData={chargerData} />
       </Box>
     </Box>
   );
 }
 
-function SearchBar() {
-  return (
-    <Box
-      p={4}
-      width="400px"
-      bg="white"
-      borderRadius="md"
-      boxShadow="md"
-      position="absolute"
-      top="20px"
-      right="20px"
-      zIndex={2}
-    >
-      <Input placeholder="충전소 검색" size="lg" />
-    </Box>
-  );
-}
-
-function InfoCard() {
-  return (
-    <Box
-      p={4}
-      bg="white"
-      boxShadow="md"
-      borderRadius="md"
-      width="400px"
-      position="absolute"
-      top="100px"
-      right="20px"
-      zIndex={2}
-    >
-      <Text fontWeight="bold" mt={2}>충전소 정보 카드</Text>
-    </Box>
-  );
-}
 
 export default Main;
