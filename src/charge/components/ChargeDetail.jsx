@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, Text, VStack, HStack, Badge, Link, Divider } from '@chakra-ui/react';
 
 const ChargeDetail = ({ statId, setCurrentView }) => {
   const [chargerDetail, setChargerDetail] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchChargerDetail = async () => {
@@ -39,16 +41,13 @@ const ChargeDetail = ({ statId, setCurrentView }) => {
         <Text fontSize="xl" fontWeight="bold">{chargerDetail.statNm || '정보 없음'}</Text>
         <Text fontSize="sm" color="gray.500">{chargerDetail.addr || '주소 정보 없음'}</Text>
         <Button width="100%" colorScheme="gray" variant="outline">
-          <HStack justify="space-between" width="100%">
-            <Text>
-              {chargerDetail.output || '정보 없음'}kW |
-              {chargerDetail.chargingFee !== null ? `${chargerDetail.chargingFee}원/kWh` : '정보 없음'}
-          </Text>
+        <HStack justify="center" width="100%">
+            <Text textAlign="center">{chargerDetail.output || '정보 없음'}kW | {chargerDetail.chargingFee || '가격 정보 없음 '}원/kWh</Text>
         </HStack>
         </Button>
         <Divider />
         <Text>리뷰 컴포넌트</Text>
-        <Button onClick={() => setCurrentView('charge')}>뒤로</Button>
+        <Button onClick={() => navigate('/')}>뒤로</Button>
       </VStack>
     </Box>
   );

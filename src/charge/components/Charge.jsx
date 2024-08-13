@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, Text, VStack, HStack, Badge, Link } from '@chakra-ui/react';
 
 const Charge = ({ setCurrentView, setSelectedStatId, chargerData }) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
 
   const ITEMS_PER_PAGE = 5;
   const totalPages = Math.ceil(chargerData.length / ITEMS_PER_PAGE);
@@ -29,10 +31,7 @@ const Charge = ({ setCurrentView, setSelectedStatId, chargerData }) => {
             <VStack align="start" spacing={3}>
               <Badge colorScheme="gray" variant="solid">{data.busiNm}</Badge>
               <Link
-                onClick={() => {
-                  setSelectedStatId(data.statId);
-                  setCurrentView('chargeDetail');
-                }}
+                onClick={() => navigate(`/charge/place/${data.statId}`)}
                 fontSize="xl"
                 fontWeight="bold"
                 cursor="pointer"
@@ -41,7 +40,7 @@ const Charge = ({ setCurrentView, setSelectedStatId, chargerData }) => {
               </Link>
               <Button width="100%" colorScheme="gray" variant="outline">
                 <HStack justify="space-between" width="100%">
-                  <Text>{data.output}kW | {data.chargingFee ?? '정보 없음'}원/kWh</Text>
+                  <Text>{data.output || '정보 없음'}kW | {data.chargingFee || '가격 정보 없음 '}원/kWh</Text>
                 </HStack>
               </Button>
             </VStack>
