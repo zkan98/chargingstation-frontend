@@ -3,7 +3,7 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 
 const FeeCard = ({ onClose }) => {
-  const [value, setValue] = useState(0); // 슬라이더 값을 상태로 관리
+  const [value, setValue] = useState(7); // 슬라이더의 초기값을 7로 설정
 
   return (
     <Box
@@ -11,7 +11,7 @@ const FeeCard = ({ onClose }) => {
       borderWidth="1px"
       borderRadius="lg"
       boxShadow="md"
-      maxW="sm" // ConnectorCard와 같은 크기로 설정
+      width="400px"
       bg="white"
     >
       {/* Header with title and close icon */}
@@ -38,7 +38,7 @@ const FeeCard = ({ onClose }) => {
         </Box>
         <Slider
           aria-label='slider-ex-1'
-          defaultValue={0}
+          defaultValue={7} // 슬라이더의 기본값을 7로 설정
           min={0}
           max={7}
           step={1}
@@ -54,10 +54,7 @@ const FeeCard = ({ onClose }) => {
       <Divider />
 
       {/* Buttons */}
-      <Box display="flex" justifyContent="space-between" mt={4}>
-        <Button variant="outline" colorScheme="gray">
-          초기화
-        </Button>
+      <Box display="flex" justifyContent="flex-end" mt={4}>
         <Button colorScheme="blue">적용</Button>
       </Box>
     </Box>
@@ -65,3 +62,4 @@ const FeeCard = ({ onClose }) => {
 };
 
 export default FeeCard;
+
