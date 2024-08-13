@@ -3,7 +3,30 @@ import UserInput from './components/Input';
 import PasswordInput from './components/PasswordInput';
 import { Link } from 'react-router-dom';
 
+
 function Login() {
+    const [email, setEmail] = useState('');
+      const [password, setPassword] = useState('');
+
+      const handleLogin = async () => {
+        const response = await fetch('/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          alert('로그인되었습니다.');
+          // 로그인 성공 처리, 예: 액세스 토큰 저장, 리디렉션 등
+          console.log(data.accessToken);
+        } else {
+          alert(data.error || '로그인에 실패했습니다.');
+        }
+      };
+
   return (
     <Box
       display="flex"
