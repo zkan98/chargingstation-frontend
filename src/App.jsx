@@ -7,7 +7,8 @@ import Join from './charge/Join.jsx';
 import MyPage from './charge/MyPage.jsx';
 import Admin from './charge/Admin.jsx';
 import Owner from './charge/Owner.jsx';
-import LocationFilter from './charge/components/FeeCard.jsx'
+import Test from './charge/components/ReviewCreate.jsx'
+import Test2 from './charge/components/ReviewRead.jsx'
 
 function App() {
   return (
@@ -27,7 +28,8 @@ function App() {
 
         <Route path="/owner" element={<Owner />} />
 
-<Route path="/l" element={<LocationFilter />} />
+<Route path="/test" element={<Test />} />
+<Route path="/test2" element={<Test2 />} />
         
         </Routes>
       </Router>
