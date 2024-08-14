@@ -19,7 +19,7 @@ const InfoCard = ({ chargerData }) => {
       position="absolute"
       top="100px"
       right="20px"
-      zIndex={2}
+      zIndex={1}
     >
       {isChargeView && <Charge chargerData={chargerData} />}
       {isChargeDetailView && <ChargeDetail statId={location.pathname.split('/').pop()} />}

@@ -26,6 +26,19 @@ const ChargeDetail = ({ statId, setCurrentView }) => {
     fetchChargerDetail();
   }, [statId]);
 
+  const getStatusText = (status) => {
+      const statusNumber = parseInt(status, 10);
+          switch (statusNumber) {
+        case 1: return '통신이상';
+        case 2: return '충전대기';
+        case 3: return '충전중';
+        case 4: return '운영중지';
+        case 5: return '점검중';
+        case 9: return '상태미확인';
+        default: return '알 수 없는 상태';
+      }
+  };
+
   return (
     <Box
       borderWidth="1px"
@@ -41,9 +54,24 @@ const ChargeDetail = ({ statId, setCurrentView }) => {
         <Text fontSize="xl" fontWeight="bold">{chargerDetail.statNm || '정보 없음'}</Text>
         <Text fontSize="sm" color="gray.500">{chargerDetail.addr || '주소 정보 없음'}</Text>
         <Button width="100%" colorScheme="gray" variant="outline">
-        <HStack justify="center" width="100%">
-            <Text textAlign="center">{chargerDetail.output || '정보 없음'}kW | {chargerDetail.chargingFee || '가격 정보 없음 '}원/kWh</Text>
-        </HStack>
+            <HStack justify="center" width="100%">
+                <Text textAlign="center">충전속도 : {chargerDetail.output || '정보 없음'}kW</Text>
+            </HStack>
+        </Button>
+        <Button width="100%" colorScheme="gray" variant="outline">
+            <HStack justify="center" width="100%">
+                <Text textAlign="center">충전요금 : {chargerDetail.chargingFee || '가격 정보 없음 '}원/kWh</Text>
+            </HStack>
+        </Button>
+        <Button width="100%" colorScheme="gray" variant="outline">
+            <HStack justify="center" width="100%">
+                <Text textAlign="center">{getStatusText(chargerDetail.stat) || '상태 정보 없음'}</Text>
+            </HStack>
+        </Button>
+        <Button width="100%" colorScheme="gray" variant="outline">
+            <HStack justify="center" width="100%">
+                <Text textAlign="center">연락처 : {chargerDetail.busiCall}</Text>
+            </HStack>
         </Button>
         <Divider />
         <Text>리뷰 컴포넌트</Text>

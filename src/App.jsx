@@ -17,7 +17,7 @@ function App() {
       <Router>
         <Routes>
             <Route path="/" element={<Main />}>
-                <Route index element={<main />} />
+                <Route index element={<Charge />} />
                 <Route path="charge/place/:statId" element={<ChargeDetail />} />
             </Route>
             <Route path="/login" element={<Login />} />

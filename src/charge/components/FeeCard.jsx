@@ -1,9 +1,28 @@
 import { Box, Button, Slider, SliderTrack, SliderFilledTrack, SliderThumb, IconButton, Divider, Heading, Text } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const FeeCard = ({ onClose }) => {
   const [value, setValue] = useState(7); // 슬라이더의 초기값을 7로 설정
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // 적용 버튼 클릭 시 URL을 업데이트하는 함수
+  const handleApply = () => {
+    const currentParams = new URLSearchParams(location.search);
+
+    // 슬라이더 값을 100의 배수로 변환
+    const fee = value === 7 ? undefined : value * 100;
+
+    if (fee !== undefined) {
+      currentParams.set('chargingFee', fee.toString());
+    } else {
+      currentParams.delete('chargingFee');
+    }
+
+    navigate(`${location.pathname}?${currentParams.toString()}`);
+  };
 
   return (
     <Box
@@ -33,12 +52,11 @@ const FeeCard = ({ onClose }) => {
       <Box mt={4} p={4} pt={6}>
         <Box mb={2} textAlign="center"> {/* 슬라이더 위에 텍스트 표시 */}
           <Text fontSize='lg' fontWeight='bold'>
-            {value === 0 ? '무료' : value === 7 ? '전체' : `${value * 100}kWh`}
+            {value === 0 ? '무료' : value === 7 ? '전체' : `${value * 100}원`}
           </Text>
         </Box>
         <Slider
           aria-label='slider-ex-1'
-          defaultValue={7} // 슬라이더의 기본값을 7로 설정
           min={0}
           max={7}
           step={1}
@@ -55,11 +73,12 @@ const FeeCard = ({ onClose }) => {
 
       {/* Buttons */}
       <Box display="flex" justifyContent="flex-end" mt={4}>
-        <Button colorScheme="blue">적용</Button>
+        <Button colorScheme="blue" onClick={handleApply}>
+          적용
+        </Button>
       </Box>
     </Box>
   );
 };
 
 export default FeeCard;
-

@@ -53,7 +53,7 @@ const SearchBar = () => {
       position="absolute"
       top="20px"
       right="20px"
-      zIndex={3}
+      zIndex={2}
     >
       <Input
         placeholder="충전소 검색"

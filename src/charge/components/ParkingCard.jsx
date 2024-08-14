@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Box, Button, SimpleGrid, Tag, IconButton, Divider, Heading } from '@chakra-ui/react';
 import { CloseIcon, RepeatIcon } from '@chakra-ui/icons';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ParkingCard = ({ onClose }) => {
   const tags = ['무료', '유료'];
-
-  // 선택된 태그를 저장하는 상태 변수
   const [selectedTag, setSelectedTag] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // 태그 클릭 시 선택 처리 함수
   const handleTagClick = (tag) => {
@@ -16,6 +17,22 @@ const ParkingCard = ({ onClose }) => {
   // 초기화 함수
   const handleReset = () => {
     setSelectedTag(null);
+  };
+
+  // 적용 버튼 클릭 시 URL을 업데이트하는 함수
+  const handleApply = () => {
+    const currentParams = new URLSearchParams(location.search);
+
+    // 선택된 태그를 파라미터 값으로 변환
+    const parkingFree = selectedTag === '무료' ? 'Y' : selectedTag === '유료' ? 'N' : undefined;
+
+    if (parkingFree !== undefined) {
+      currentParams.set('parkingFree', parkingFree);
+    } else {
+      currentParams.delete('parkingFree');
+    }
+
+    navigate(`${location.pathname}?${currentParams.toString()}`);
   };
 
   return (
@@ -72,8 +89,9 @@ const ParkingCard = ({ onClose }) => {
           leftIcon={<RepeatIcon />}
           mr={2}
         >
+          초기화
         </Button>
-        <Button colorScheme="blue">
+        <Button colorScheme="blue" onClick={handleApply}>
           적용
         </Button>
       </Box>

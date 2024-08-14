@@ -1,12 +1,25 @@
 import { useState } from 'react';
 import { Box, Button, SimpleGrid, Tag, IconButton, Divider, Heading } from '@chakra-ui/react';
 import { CloseIcon, RepeatIcon } from '@chakra-ui/icons';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-const LocationCard = ({ onClose }) => {  // onClose prop을 추가합니다.
-  const tags = ['휴게소', '공영주차장', '공공기관/공공장소', '숙박', '관광지/문화시설', '골프/스포츠', '쇼핑'];
+const LocationCard = ({ onClose }) => {
+  const tags = {
+    '공공시설': 'A0',
+    '주차시설': 'B0',
+    '휴게시설': 'C0',
+    '관광시설': 'D0',
+    '상업시설': 'E0',
+    '차량정비시설': 'F0',
+    '기타시설': 'G0',
+    '공동주택시설': 'H0',
+    '근린생활시설': 'I0',
+    '교육문화시설': 'J0'
+  };
 
-  // 선택된 태그를 저장하는 상태 변수
   const [selectedTags, setSelectedTags] = useState([]);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // 태그 클릭 시 선택/해제 처리 함수
   const handleTagClick = (tag) => {
@@ -22,6 +35,22 @@ const LocationCard = ({ onClose }) => {  // onClose prop을 추가합니다.
     setSelectedTags([]);
   };
 
+  // 적용 버튼 클릭 시 URL을 업데이트하는 함수
+  const handleApply = () => {
+    const currentParams = new URLSearchParams(location.search);
+
+    // 선택된 태그를 코드 값으로 변환
+    const selectedValues = selectedTags.map(tag => tags[tag]);
+
+    if (selectedValues.length > 0) {
+      currentParams.set('kind', selectedValues.join(','));
+    } else {
+      currentParams.delete('kind');
+    }
+
+    navigate(`${location.pathname}?${currentParams.toString()}`);
+  };
+
   return (
     <Box
       p={4}
@@ -32,7 +61,6 @@ const LocationCard = ({ onClose }) => {  // onClose prop을 추가합니다.
       margin="auto"
       bg="white"
     >
-
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Heading as="h3" size="md">
           장소
@@ -49,9 +77,9 @@ const LocationCard = ({ onClose }) => {  // onClose prop을 추가합니다.
 
       {/* Tags Grid */}
       <SimpleGrid columns={3} spacing={2} mb={4} mt={4}>
-        {tags.map((tag) => (
+        {Object.keys(tags).map((tag) => (
           <Tag
-            key={tag}
+            key={tags[tag]}
             size="lg"
             variant="solid"
             bg={selectedTags.includes(tag) ? 'teal.500' : 'gray.100'}
@@ -77,14 +105,14 @@ const LocationCard = ({ onClose }) => {  // onClose prop을 추가합니다.
           leftIcon={<RepeatIcon />}
           mr={2}
         >
+          초기화
         </Button>
-        <Button colorScheme="blue">
+        <Button colorScheme="blue" onClick={handleApply}>
           적용
         </Button>
       </Box>
     </Box>
   );
 };
-
 
 export default LocationCard;
