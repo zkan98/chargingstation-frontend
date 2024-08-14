@@ -18,6 +18,7 @@ const Charge = ({ setCurrentView, setSelectedStatId, chargerData }) => {
       {paginatedData.length > 0 ? (
         paginatedData.map((data) => (
           <Box
+            onClick={() => navigate(`/charge/place/${data.statId}`)}
             key={data.statId}
             borderWidth="1px"
             borderRadius="lg"
@@ -31,7 +32,7 @@ const Charge = ({ setCurrentView, setSelectedStatId, chargerData }) => {
             <VStack align="start" spacing={3}>
               <Badge colorScheme="gray" variant="solid">{data.busiNm}</Badge>
               <Link
-                onClick={() => navigate(`/charge/place/${data.statId}`)}
+
                 fontSize="xl"
                 fontWeight="bold"
                 cursor="pointer"
