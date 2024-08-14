@@ -6,6 +6,11 @@ import ConnectType from './components/ConnectType';
 import Header from './components/Header';
 import Address from './components/Address';
 
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+};
 
 function MyPage() {
     const [formData, setFormData] = useState({
@@ -19,43 +24,21 @@ function MyPage() {
   
     // 회원 정보를 불러오는 부분 (가상의 API 호출)
     useEffect(() => {
-      // 실제로는 API를 호출하여 데이터를 가져와야 합니다.
-      // 아래는 예시 데이터입니다.
-      const fetchUserData = async () => {
-        const data = await fetch('/users/info').then((res) => res.json());
-        setFormData(data);
-      };
-  
-      fetchUserData();
-    }, []);
+        const fetchUserData = async () => {
+          const token = getCookie('accessToken');
+          const response = await fetch('http://localhost:8080/users/info', {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          const data = await response.json();
+          setFormData(data);
+        };
 
-//     const fetchUserData = async () => {
-//       // 쿠키에서 토큰을 가져오는 함수
-//       const getCookie = (name) => {
-//         const value = `; ${document.cookie}`;
-//         const parts = value.split(`; ${name}=`);
-//         if (parts.length === 2) return parts.pop().split(';').shift();
-//       };
-//
-//       const token = getCookie('accessToken'); // 쿠키에서 'accessToken' 가져오기
-//
-//       // API 요청
-//       const response = await fetch('/api/user-info', {
-//         method: 'GET',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           'Authorization': `Bearer ${token}` // Authorization 헤더에 토큰 추가
-//         }
-//       });
-//
-//       if (response.ok) {
-//         const data = await response.json();
-//         setFormData(data);
-//       } else {
-//         // 오류 처리
-//         console.error('회원 정보를 불러오는 중 오류가 발생했습니다.');
-//       }
-//     };
+        fetchUserData();
+      }, []);
+
 
 
 
@@ -78,71 +61,75 @@ function MyPage() {
   
     // 회원 정보 수정 요청
     const handleSave = async () => {
-      try {
-        // API 요청
-        const response = await fetch('/users/mypage/update', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
-  
-        if (!response.ok) {
-          throw new Error('회원정보 수정 실패');
-        }
-  
-        toast({
-          title: '회원정보가 수정되었습니다.',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        });
-      } catch (error) {
-        toast({
-          title: '회원정보 수정 중 오류가 발생했습니다.',
-          description: error.message,
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-    };
-  
-    // 회원 탈퇴 요청
-    const handleDeleteAccount = async () => {
-      const confirmDelete = window.confirm('정말로 회원 탈퇴를 하시겠습니까?');
-  
-      if (confirmDelete) {
         try {
-          // API 요청
-          const response = await fetch('/users/mypage/delete', {
-            method: 'DELETE',
+          const token = getCookie('accessToken');
+          const response = await fetch('http://localhost:8080/users/mypage/update', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(formData),
           });
-  
+
           if (!response.ok) {
-            throw new Error('회원 탈퇴 실패');
+            throw new Error('회원정보 수정 실패');
           }
-  
+
           toast({
-            title: '회원탈퇴가 완료되었습니다.',
+            title: '회원정보가 수정되었습니다.',
             status: 'success',
             duration: 3000,
             isClosable: true,
           });
-  
-          // 탈퇴 후 추가 작업 (예: 로그인 페이지로 이동)
         } catch (error) {
           toast({
-            title: '회원탈퇴 중 오류가 발생했습니다.',
+            title: '회원정보 수정 중 오류가 발생했습니다.',
             description: error.message,
             status: 'error',
             duration: 3000,
             isClosable: true,
           });
         }
-      }
-    }
+      };
+  
+    // 회원 탈퇴 요청
+     const handleDeleteAccount = async () => {
+        const confirmDelete = window.confirm('정말로 회원 탈퇴를 하시겠습니까?');
+
+        if (confirmDelete) {
+          try {
+            const token = getCookie('accessToken');
+            const response = await fetch('http://localhost:8080/users/mypage/delete', {
+              method: 'DELETE',
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
+
+            if (!response.ok) {
+              throw new Error('회원 탈퇴 실패');
+            }
+
+            toast({
+              title: '회원탈퇴가 완료되었습니다.',
+              status: 'success',
+              duration: 3000,
+              isClosable: true,
+            });
+
+            // 탈퇴 후 추가 작업 (예: 로그인 페이지로 이동)
+          } catch (error) {
+            toast({
+              title: '회원탈퇴 중 오류가 발생했습니다.',
+              description: error.message,
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+            });
+          }
+        }
+      };
 
     return (
         <Box minH="100vh">

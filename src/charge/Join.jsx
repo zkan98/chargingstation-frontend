@@ -55,13 +55,25 @@ function Join() {
       return;
     }
 
+    // formData를 userDto로 변환
+        const userDto = {
+          email: formData.email,
+          password: formData.password,
+          username: formData.username,
+          address: formData.address || null,
+          phoneNumber: formData.phoneNumber || null,
+          connectorType: formData.connectType || null,
+          isAdmin: formData.userType === 'option1' // 예시로 'option1'을 관리자, 'option2'를 일반 사용자로 가정
+        };
+
+
     try {
-      const response = await fetch('/users/register', {
+      const response = await fetch('http://localhost:8080/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(userDto),
       });
 
       if (!response.ok) {

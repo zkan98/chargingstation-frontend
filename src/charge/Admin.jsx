@@ -3,10 +3,10 @@ import { Box, Text, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/r
 import TableList from './components/TableList';
 
 // 샘플 데이터
-const userList = [
-  { id: 'User1', email: 'user1@example.com', connectorType: 'Type1', userType: '일반' },
-  { id: 'User2', email: 'user2@example.com', connectorType: 'Type2', userType: '사업자' }
-];
+// const userList = [
+//   { id: 'User1', email: 'user1@example.com', connectorType: 'Type1', userType: '일반' },
+//   { id: 'User2', email: 'user2@example.com', connectorType: 'Type2', userType: '사업자' }
+// ];
 
 const chargingStationList = [
   { name: 'Station1', address: 'Location1', slot: '10', connectorType: 'Type1' },
@@ -15,6 +15,25 @@ const chargingStationList = [
 
 const Admin = () => {
   const [selectedTable, setSelectedTable] = useState('userList');
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => {
+      const fetchUserList = async () => {
+        try {
+          const response = await fetch('http://localhost:8080/users/list', {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          const data = await response.json();
+          setUserList(data);
+        } catch (error) {
+          console.error('Failed to fetch user list:', error);
+        }
+      };
+
+      fetchUserList();
+    }, []);
 
   const renderTable = () => {
     switch (selectedTable) {
