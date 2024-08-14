@@ -11,13 +11,22 @@ function Header() {
   //  fetchUserData().then(data => setUserType(data.userType));
   //}, []);
 
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  };
+
+
   const handleLogout = async () => {
     try {
-      const response = await fetch('/logout', {
+      const token = getCookie('accessToken');
+      const response = await fetch('http://localhost:8080/users/logout', {
         method: 'POST', // 또는 'GET' 등 백엔드에 맞는 HTTP 메서드 사용
         credentials: 'include', // 쿠키를 포함해서 보낼 경우
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
       });
 
@@ -31,6 +40,10 @@ function Header() {
       console.error('An error occurred during logout:', error);
     }
   };
+
+  const handleLoginClick = () => {
+      navigate('/login');
+    };
 
   return (
     <Flex
