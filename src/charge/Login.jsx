@@ -42,7 +42,7 @@ function Login() {
       <br />
       <br />
       <VStack spacing={4} width="400px">
-              <UserInput placeholder="아이디" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <UserInput placeholder="이메일" value={email} onChange={(e) => setEmail(e.target.value)} />
               <PasswordInput placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} />
               <Button colorScheme="green" width="100%" onClick={handleLogin}>로그인</Button>
         <br />
