@@ -14,8 +14,8 @@ const OwnerTable = ({ data, onEdit, onDelete }) => {
       </Thead>
       <Tbody>
         {data.map((item) => (
-          <Tr key={item.id}>
-            <Td>{item.name}</Td>
+          <Tr key={item.statId}>
+            <Td>{item.statNm}</Td>
             <Td isTruncated maxWidth="300px">
               {item.address}
             </Td>
