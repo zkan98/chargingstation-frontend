@@ -7,6 +7,7 @@ import Header from './components/Header';
 import ConnectType from './components/ConnectType';
 import Address from './components/Address';
 import Parking from './components/Parking';
+import UploadCertificates from './components/UploadCertificates';
 
 const Owner = () => {
   const [selectedView, setSelectedView] = useState('chargingStationList');
@@ -190,6 +191,8 @@ const Owner = () => {
                 setSelectedView('addChargingStation');
               } else if (index === 2) {
                 setSelectedView('editChargingStation');
+              } else if (index === 3) {
+                setSelectedView('uploadCertificates');
               } else {
                 setSelectedView('chargingStationList');
               }
@@ -199,6 +202,7 @@ const Owner = () => {
             <Tab>충전소 목록</Tab>
             <Tab>충전소 추가</Tab>
             <Tab>충전소 수정</Tab>
+            <Tab>사업자 인증</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -209,6 +213,9 @@ const Owner = () => {
             </TabPanel>
             <TabPanel>
               {selectedView === 'editChargingStation' && renderContent()}
+            </TabPanel>
+            <TabPanel>
+              {selectedView === 'uploadCertificates' && <UploadCertificates />}
             </TabPanel>
           </TabPanels>
         </Tabs>
