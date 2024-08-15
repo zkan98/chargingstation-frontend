@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { Box, Button, VStack, Text, useToast } from '@chakra-ui/react';
+import { Box, Button, VStack, Text, useToast, Image } from '@chakra-ui/react';
 import UserInput from './components/Input';
 import PasswordInput from './components/PasswordInput';
-import ConnectType from './components/ConnectType';
 import ChooseOne from './components/ChooseOne';
-import Address from './components/Address';
+import elecsearch from '../assets/elecsearch.png';
 
 function Join() {
   const [formData, setFormData] = useState({
@@ -12,10 +11,7 @@ function Join() {
     email: '',
     password: '',
     confirmPassword: '',
-    address: '',
-    detailAddress: '',
-    connectType: '',
-    userType: 'option1',
+    userType: 'option1'
   });
 
   const toast = useToast();
@@ -32,13 +28,6 @@ function Join() {
     setFormData((prevData) => ({
       ...prevData,
       userType: value,
-    }));
-  };
-
-  const handleAddressChange = (address) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      address: address,
     }));
   };
 
@@ -108,12 +97,8 @@ function Join() {
       as="form"
       onSubmit={handleSubmit}
     >
-      <Text fontSize="36px">
-        <span style={{ fontWeight: 'normal' }}>7team</span>
-      </Text>
-      <br />
-      <br />
       <VStack spacing={4} width="400px">
+      <Image src={elecsearch} alt="Electric Search" objectFit="cover"/>
         <UserInput
           placeholder="아이디"
           name="username"
@@ -138,30 +123,7 @@ function Join() {
           value={formData.confirmPassword}
           onChange={handleChange}
         />
-        <Address setAddress={handleAddressChange} />
-        <Box
-          border="1px solid"
-          borderColor="gray.300"
-          borderRadius="md"
-          p={2}
-          width="100%"
-        >
-          <Text fontSize="md" color="gray.600">
-            {formData.address || '기본 주소'}
-          </Text>
-        </Box>
-        <UserInput
-          placeholder="상세 주소"
-          name="detailAddress"
-          value={formData.detailAddress}
-          onChange={handleChange}
-        />
-        <ConnectType
-          placeholder="커넥트타입"
-          name="connectType"
-          value={formData.connectType}
-          onChange={handleChange}
-        />
+        
         <ChooseOne value={formData.userType} onChange={handleUserTypeChange} />
         <br />
         <Button colorScheme="blue" width="100%" type="submit">

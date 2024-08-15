@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
-import { Outlet } from 'react-router-dom';
-import { Box, Flex, Button, Text, Input, useDisclosure } from '@chakra-ui/react';
+import { Box, Flex, Button, useDisclosure } from '@chakra-ui/react';
 import Header from './components/Header';
 import MapView from './components/MapView';
 import LocationCard from './components/LocationCard';
@@ -11,6 +10,7 @@ import ParkingCard from './components/ParkingCard';
 import CompanyCard from './components/CompanyCard';
 import InfoCard from './components/InfoCard';
 import SearchBar from './components/SearchBar';
+import ChargeDetail from './components/ChargeDetail';
 
 
 function Main() {
@@ -36,6 +36,8 @@ function Main() {
   const [cardPosition, setCardPosition] = useState({ top: '0', left: '0' });
   const [openCard, setOpenCard] = useState(null); // 현재 열린 카드 상태를 관리
   const [chargerData, setChargerData] = useState([]);
+  const [selectedCharger, setSelectedCharger] = useState(null);
+  
 
   const connectorButtonRef = useRef(null);
   const locationButtonRef = useRef(null);
@@ -94,7 +96,7 @@ function Main() {
   });
 
   return (
-    <Box minH="100vh" bg="gray.100">
+    <Box className="box-wrapper">
       <Header />
       <Flex
         bg="white"
@@ -230,9 +232,14 @@ function Main() {
       )}
 
       <Box position="relative">
-        <MapView setChargerData={setChargerData} />
-        <SearchBar />
-        <InfoCard chargerData={chargerData} />
+        <MapView
+          setChargerData={setChargerData}
+          setSelectedCharger={setSelectedCharger}
+          center={selectedCharger ? { lat: selectedCharger.lat, lng: selectedCharger.lng } : null}
+          zoomLevel={selectedCharger ? 3 : undefined}
+        />
+        <SearchBar mb={2} setSelectedCharger={setSelectedCharger}/>
+        <InfoCard chargerData={chargerData} mt={2}/>
       </Box>
     </Box>
   );
