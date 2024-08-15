@@ -63,7 +63,7 @@ function Join() {
           address: formData.address || null,
           phoneNumber: formData.phoneNumber || null,
           connectorType: formData.connectType || null,
-          isAdmin: formData.userType === 'option1' // 예시로 'option1'을 관리자, 'option2'를 일반 사용자로 가정
+          isAdmin: false
         };
 
 
