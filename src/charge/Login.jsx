@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Box, Button, VStack, Text } from '@chakra-ui/react';
+import { Box, Button, VStack, Text, Image } from '@chakra-ui/react';
 import UserInput from './components/Input';
 import PasswordInput from './components/PasswordInput';
 import { Link } from 'react-router-dom';
-
+import elecsearch from '../assets/elecsearch.png';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -40,15 +40,14 @@ function Login() {
       minH="100vh"
       bg="white"
     >
-      <Text fontSize="36px"><span style={{ fontWeight: 'normal' }}>7team</span></Text>
-      <br />
-      <br />
+      
       <VStack spacing={4} width="400px">
+      <Image src={elecsearch} alt="Electric Search" objectFit="cover"/>
               <UserInput placeholder="이메일" value={email} onChange={(e) => setEmail(e.target.value)} />
               <PasswordInput placeholder="비밀번호" value={password} onChange={(e) => setPassword(e.target.value)} />
               <Button colorScheme="green" width="100%" onClick={handleLogin}>로그인</Button>
         <br />
-        <Text mt={4}>우리와 함께 하세요!</Text>
+        <Text mt={4}>일렉서치와 함께 하세요!</Text>
         <Button as={Link} to="/join" colorScheme="blue" width="100%">회원가입</Button>
       </VStack>
     </Box>

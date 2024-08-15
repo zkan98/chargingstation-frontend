@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Flex, HStack, Text, Button } from '@chakra-ui/react';
+import { Flex, HStack, Button, Image } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
+import elecsearch from '../../assets/elecsearch.png';
 
 function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -54,8 +55,11 @@ function Header() {
       justify="space-between"
       width="100%"
       zIndex={1}
+      height="70px"
     >
-      <Text as={Link} to="/" fontSize="xl" fontWeight="bold" ml={3}>7team</Text>
+      <Link to="/">
+      <Image src={elecsearch} alt="Electric Search" objectFit="contain" maxHeight="70px"/>
+      </Link>
       <HStack spacing={4}>
         {isLoggedIn ? (
           <>
@@ -84,4 +88,3 @@ function Header() {
 }
 
 export default Header;
-

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Text, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react';
 import TableList from './components/TableList';
 
@@ -71,7 +71,7 @@ const Admin = () => {
   return (
     <Box>
       <Text textAlign="center" fontSize="2xl" fontWeight="bold" mb={4}>
-        Admin
+        관리자페이지
       </Text>
       <Tabs
         isFitted
