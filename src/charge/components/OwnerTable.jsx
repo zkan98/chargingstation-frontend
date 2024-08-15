@@ -32,9 +32,9 @@ const OwnerTable = ({ data, onEdit, onDelete }) => {
               </Box>
             </Td>
           </Tr>
-        ))}
-      </Tbody>
-    </Table>
+          ))}
+        </Tbody>
+      </Table>
   );
 };
 

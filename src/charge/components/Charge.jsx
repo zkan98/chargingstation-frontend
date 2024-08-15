@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Text, VStack, HStack, Badge, Link } from '@chakra-ui/react';
+import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
 
 const Charge = ({ setCurrentView, setSelectedStatId, chargerData }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +25,7 @@ const Charge = ({ setCurrentView, setSelectedStatId, chargerData }) => {
             borderRadius="lg"
             overflow="hidden"
             p={4}
-            width="300px"
+            width="auto"
             boxShadow="md"
             bg="white"
             mb={4}
@@ -55,8 +56,8 @@ const Charge = ({ setCurrentView, setSelectedStatId, chargerData }) => {
         <Button
           onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))}
           isDisabled={currentPage === 1}
+          leftIcon={<ArrowLeftIcon />}
         >
-          이전
         </Button>
         <Text>
           {currentPage} / {totalPages}
@@ -64,8 +65,8 @@ const Charge = ({ setCurrentView, setSelectedStatId, chargerData }) => {
         <Button
           onClick={() => setCurrentPage((page) => Math.min(page + 1, totalPages))}
           isDisabled={currentPage === totalPages}
+          rightIcon={<ArrowRightIcon />}
         >
-          다음
         </Button>
       </HStack>
     </Box>

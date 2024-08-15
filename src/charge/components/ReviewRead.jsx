@@ -51,9 +51,9 @@ const ReviewRead = ({ isLoggedIn }) => {
   };
 
   return (
-    <Box p={5} maxW="800px" mx="auto">
-      <VStack spacing={4} align="start">
-        <Box p={5} borderWidth={1} borderRadius="md" shadow="md" bg="white">
+    <Box p={2} maxW="400px" mx="auto" width="full">
+      <VStack spacing={1} align="start" width="full">
+        <Box p={2} borderWidth={1} borderRadius="md" bg="white" width="full">
           <StarRating rating={review.rating} />
           <Text fontWeight="bold" mt={2}>{review.userId}</Text>
           <Text mt={2}>{review.review}</Text>
@@ -99,18 +99,4 @@ const ReviewRead = ({ isLoggedIn }) => {
   );
 };
 
-// 테스트용 로그인 로그아웃 확인되면 지워주세요.
-const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  return (
-    <div>
-      <Button onClick={() => setIsLoggedIn(!isLoggedIn)}>
-        {isLoggedIn ? '로그아웃' : '로그인'}
-      </Button>
-      <ReviewRead isLoggedIn={isLoggedIn} />
-    </div>
-  );
-};
-
-export default App;
+export default ReviewRead;

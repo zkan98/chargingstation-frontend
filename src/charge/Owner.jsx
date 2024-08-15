@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Button, Flex, VStack, Text, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react';
 import OwnerTable from './components/OwnerTable';
 import OwnerInput from './components/Input';
@@ -25,7 +25,7 @@ const chgerTypeMap = {
 
 const Owner = () => {
   const [selectedView, setSelectedView] = useState('chargingStationList');
-  const [chargingStations, setChargingStations] = useState(initialChargingStationList);
+  const [chargingStations, setChargingStations] = useState([]);
   const [inputValues, setInputValues] = useState({
     statId: '',
     name: '',
@@ -174,11 +174,11 @@ const Owner = () => {
   const renderContent = () => {
     if (selectedView === 'chargingStationList') {
       return (
-        <OwnerTable
-          data={chargingStations}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+          <OwnerTable
+              data={chargingStations}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+          />
       );
     } else if (selectedView === 'addChargingStation') {
       return (
@@ -230,33 +230,45 @@ const Owner = () => {
   };
 
   return (
-    <Box minH="100vh">
-      <Header />
-      <Tabs
-        isFitted
-        variant='enclosed'
-        onChange={(index) => {
-          setSelectedView(index === 0 ? 'chargingStationList' : (index === 1 ? 'addChargingStation' : 'editChargingStation'));
-        }}
-      >
-        <TabList mb='1em'>
-          <Tab>충전소 목록</Tab>
-          <Tab>충전소 추가</Tab>
-          <Tab>충전소 수정</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-            {selectedView === 'chargingStationList' && renderContent()}
-          </TabPanel>
-          <TabPanel>
-            {selectedView === 'addChargingStation' && renderContent()}
-          </TabPanel>
-          <TabPanel>
-            {selectedView === 'editChargingStation' && renderContent()}
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-    </Box>
+      <Box minH="100vh">
+        <Header />
+        <Tabs
+            isFitted
+            variant='enclosed'
+            onChange={(index) => {
+              if (index === 1) {
+                setSelectedView('addChargingStation');
+              } else if (index === 2) {
+                setSelectedView('editChargingStation');
+              } else if (index === 3) {
+                setSelectedView('uploadCertificates');
+              } else {
+                setSelectedView('chargingStationList');
+              }
+            }}
+        >
+          <TabList mb='1em'>
+            <Tab>충전소 목록</Tab>
+            <Tab>충전소 추가</Tab>
+            <Tab>충전소 수정</Tab>
+            <Tab>사업자 인증</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              {selectedView === 'chargingStationList' && renderContent()}
+            </TabPanel>
+            <TabPanel>
+              {selectedView === 'addChargingStation' && renderContent()}
+            </TabPanel>
+            <TabPanel>
+              {selectedView === 'editChargingStation' && renderContent()}
+            </TabPanel>
+            <TabPanel>
+              {selectedView === 'uploadCertificates' && <UploadCertificates />}
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Box>
   );
 };
 

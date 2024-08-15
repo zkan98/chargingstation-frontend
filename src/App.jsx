@@ -11,6 +11,7 @@ import Test from './charge/components/ReviewCreate.jsx'
 import Test2 from './charge/components/ReviewRead.jsx'
 import Charge from './charge/components/Charge.jsx'
 import ChargeDetail from './charge/components/ChargeDetail.jsx'
+import ApprovalList from './charge/components/ApprovalList.jsx';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/owner" element={<Owner />} />
             <Route path="/test" element={<Test />} />
             <Route path="/test2" element={<Test2 />} />
+            <Route path="/admin/approval-requests" element={<ApprovalList />} />
         </Routes>
       </Router>
 

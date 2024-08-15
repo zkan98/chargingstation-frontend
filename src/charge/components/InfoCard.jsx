@@ -13,13 +13,14 @@ const InfoCard = ({ chargerData }) => {
     <Box
       p={4}
       bg="white"
-      boxShadow="md"
       borderRadius="md"
       width="400px"
       position="absolute"
       top="100px"
-      right="20px"
+      right="10px"
       zIndex={1}
+      maxHeight="440px" 
+      overflowY="auto" 
     >
       {isChargeView && <Charge chargerData={chargerData} />}
       {isChargeDetailView && <ChargeDetail statId={location.pathname.split('/').pop()} />}

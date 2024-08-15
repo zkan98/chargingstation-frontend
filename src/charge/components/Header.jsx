@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { Flex, HStack, Text, Button } from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+import { Flex, HStack, Button, Image } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
+import elecsearch from '../../assets/elecsearch.png';
 
 function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -17,6 +18,13 @@ function Header() {
     if (parts.length === 2) return parts.pop().split(';').shift();
   };
 
+  useEffect(() => {
+      const token = getCookie('accessToken');
+      if (token) {
+        setIsLoggedIn(true);
+      }
+    }, []);
+
 
   const handleLogout = async () => {
     try {
@@ -31,6 +39,8 @@ function Header() {
       });
 
       if (response.ok) {
+      // 쿠키에서 accessToken 삭제
+        document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         setIsLoggedIn(false);
         navigate('/');
       } else {
@@ -54,8 +64,11 @@ function Header() {
       justify="space-between"
       width="100%"
       zIndex={1}
+      height="70px"
     >
-      <Text as={Link} to="/" fontSize="xl" fontWeight="bold" ml={3}>7team</Text>
+      <Link to="/">
+      <Image src={elecsearch} alt="Electric Search" objectFit="contain" maxHeight="70px"/>
+      </Link>
       <HStack spacing={4}>
         {isLoggedIn ? (
           <>
@@ -84,4 +97,3 @@ function Header() {
 }
 
 export default Header;
-

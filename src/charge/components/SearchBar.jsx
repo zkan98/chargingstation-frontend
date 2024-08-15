@@ -49,10 +49,9 @@ const SearchBar = () => {
       width="400px"
       bg="white"
       borderRadius="md"
-      boxShadow="md"
       position="absolute"
-      top="20px"
-      right="20px"
+      top="10px"
+      right="10px"
       zIndex={2}
     >
       <Input
