@@ -29,7 +29,7 @@ function Header() {
   const handleLogout = async () => {
     try {
       const token = getCookie('accessToken');
-      const response = await fetch('http://localhost:8080/users/logout', {
+      const response = await fetch('http://34.47.120.150:8080/users/logout', {
         method: 'POST', // 또는 'GET' 등 백엔드에 맞는 HTTP 메서드 사용
         credentials: 'include', // 쿠키를 포함해서 보낼 경우
         headers: {

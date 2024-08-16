@@ -20,7 +20,7 @@ const Admin = () => {
   useEffect(() => {
       const fetchUserList = async () => {
         try {
-          const response = await fetch('http://localhost:8080/users/list', {
+          const response = await fetch('http://34.47.120.150:8080/users/list', {
             headers: {
               'Content-Type': 'application/json'
             }

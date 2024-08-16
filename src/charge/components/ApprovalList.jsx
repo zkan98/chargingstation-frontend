@@ -4,22 +4,34 @@ import axiosInstance from "../../api/axios.js";
 
 const ApprovalList = () => {
   const [data, setData] = useState([]);
+  const [ownerId, setOwnerId] = useState(null);
 
   useEffect(() => {
-    const testOwnerId = 1;  // 임시로 ownerId를 설정
-    axiosInstance.get(`/api/approval-requests/${testOwnerId}`)
-    .then((response) => {
-      setData(response.data);
-    })
-    .catch((error) => {
-      console.error('승인 요청 목록을 가져오는 중 오류가 발생했습니다:', error);
-    });
+    // 예시로 localStorage에서 ownerId를 가져오는 로직
+    const user = JSON.parse(localStorage.getItem('user')); // localStorage에서 user 정보 가져오기
+    const ownerIdFromUser = user?.ownerId;
+
+    if (ownerIdFromUser) {
+      setOwnerId(ownerIdFromUser); // ownerId 설정
+    }
   }, []);
+
+  useEffect(() => {
+    if (ownerId) {  // ownerId가 존재할 경우에만 API 호출
+      axiosInstance.get(`/api/approval-requests/${ownerId}`)
+      .then((response) => {
+        setData(response.data);
+      })
+      .catch((error) => {
+        console.error('승인 요청 목록을 가져오는 중 오류가 발생했습니다:', error);
+      });
+    }
+  }, [ownerId]);
 
   const handleApprove = (requestId) => {
     axiosInstance.post(`/api/approval-requests/approve/${requestId}`)
     .then((response) => {
-      setData(data.map(item => item.id === requestId ? response.data : item));
+      setData(data.map(item => item.requestId === requestId ? response.data : item));
     })
     .catch((error) => {
       console.error('승인 처리 중 오류가 발생했습니다:', error);
@@ -29,7 +41,7 @@ const ApprovalList = () => {
   const handleReject = (requestId) => {
     axiosInstance.post(`/api/approval-requests/reject/${requestId}`)
     .then((response) => {
-      setData(data.map(item => item.id === requestId ? response.data : item));
+      setData(data.map(item => item.requestId === requestId ? response.data : item));
     })
     .catch((error) => {
       console.error('거절 처리 중 오류가 발생했습니다:', error);

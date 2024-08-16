@@ -87,7 +87,7 @@ const Owner = () => {
         throw new Error('Invalid item statId');
       }
 
-      const response = await fetch(`http://localhost:8080/charger/place/deleteCharger`, {
+      const response = await fetch(`http://34.47.120.150:8080/charger/place/deleteCharger`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
@@ -127,7 +127,7 @@ const Owner = () => {
     try {
       let response;
       if (statId) {
-        response = await fetch(`http://localhost:8080/charger/place/updateCharger`, {
+        response = await fetch(`http://34.47.120.150:8080/charger/place/updateCharger`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ const Owner = () => {
           body: JSON.stringify(requestPayload),
         });
       } else {
-        response = await fetch('http://localhost:8080/charger/place/addCharger', {
+        response = await fetch('http://34.47.120.150:8080/charger/place/addCharger', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

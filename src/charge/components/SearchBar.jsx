@@ -12,7 +12,7 @@ const SearchBar = () => {
     if (searchTerm) {
       const fetchSearchResults = async () => {
         try {
-          const response = await fetch(`http://localhost:8080/charger/search?searchTerm=${searchTerm}`, {
+          const response = await fetch(`http://34.47.120.150:8080/charger/search?searchTerm=${searchTerm}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

@@ -13,7 +13,7 @@ const ChargeDetail = ({ setSelectedCharger }) => {
   useEffect(() => {
     const fetchChargerDetail = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/charger/place/${statId}`, {
+        const response = await fetch(`http://34.47.120.150:8080/charger/place/${statId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

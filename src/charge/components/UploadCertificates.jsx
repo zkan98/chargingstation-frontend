@@ -29,7 +29,7 @@ const UploadCertificates = () => {
 
     try {
       setUploading(true);
-      const response = await axios.post('http://localhost:8080/api/approval-requests', formData, {
+      const response = await axios.post('http://34.47.120.150:8080/api/approval-requests', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
