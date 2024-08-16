@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Flex, HStack, Button, Image } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import elecsearch from '../../assets/elecsearch.png';
@@ -18,6 +18,13 @@ function Header() {
     if (parts.length === 2) return parts.pop().split(';').shift();
   };
 
+  useEffect(() => {
+      const token = getCookie('accessToken');
+      if (token) {
+        setIsLoggedIn(true);
+      }
+    }, []);
+
 
   const handleLogout = async () => {
     try {
@@ -32,6 +39,8 @@ function Header() {
       });
 
       if (response.ok) {
+      // 쿠키에서 accessToken 삭제
+        document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         setIsLoggedIn(false);
         navigate('/');
       } else {

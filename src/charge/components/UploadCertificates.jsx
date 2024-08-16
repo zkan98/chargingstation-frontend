@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Button, Input, Stack, FormControl, FormLabel, Heading } from '@chakra-ui/react';
+import { useState } from 'react';
+import { Box, Button, Stack, FormControl, FormLabel, Text, Input } from '@chakra-ui/react';
 import axios from 'axios';
 
 const UploadCertificates = () => {
@@ -46,24 +46,50 @@ const UploadCertificates = () => {
   };
 
   return (
-      <Box maxW="md" mx="auto" mt={10} p={6} borderWidth={1} borderRadius="lg">
-        <Heading mb={6} textAlign="center">사업자 증명서 및 신분증 업로드</Heading>
-        <form onSubmit={handleSubmit}>
-          <Stack spacing={4}>
-            <FormControl isRequired>
-              <FormLabel>사업자 증명서</FormLabel>
-              <Input type="file" onChange={handleBusinessCertificateChange} />
-            </FormControl>
-            <FormControl isRequired>
-              <FormLabel>신분증 증명서</FormLabel>
-              <Input type="file" onChange={handleIdentityProofChange} />
-            </FormControl>
-            <Button type="submit" colorScheme="blue" isLoading={uploading}>
-              업로드
+    <Box maxW="400" mx="auto">
+      <Text fontSize="28px" fontWeight="bold">사업자 증명서 및 신분증 업로드</Text>
+      <br />
+      <form onSubmit={handleSubmit}>
+        <Stack spacing={4}>
+          <br />
+          <FormControl isRequired>
+            <FormLabel>사업자 증명서</FormLabel>
+            <Button
+              colorScheme="purple"
+              onClick={() => document.getElementById('businessCertificateInput').click()}
+            >
+              {businessCertificate ? businessCertificate.name : '사업자 증명서 선택'}
             </Button>
-          </Stack>
-        </form>
-      </Box>
+            <Input
+              id="businessCertificateInput"
+              type="file"
+              onChange={handleBusinessCertificateChange}
+              display="none"
+            />
+          </FormControl>
+          <br />
+          <FormControl isRequired>
+            <FormLabel>신분증 증명서</FormLabel>
+            <Button
+              colorScheme="purple"
+              onClick={() => document.getElementById('identityProofInput').click()}
+            >
+              {identityProof ? identityProof.name : '신분증 증명서 선택'}
+            </Button>
+            <Input
+              id="identityProofInput"
+              type="file"
+              onChange={handleIdentityProofChange}
+              display="none"
+            />
+          </FormControl>
+          <br />
+          <Button type="submit" colorScheme="blue" isLoading={uploading}>
+            업로드
+          </Button>
+        </Stack>
+      </form>
+    </Box>
   );
 };
 
