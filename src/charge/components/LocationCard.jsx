@@ -105,6 +105,7 @@ const LocationCard = ({ onClose }) => {
           leftIcon={<RepeatIcon />}
           mr={2}
         >
+          초기화
         </Button>
         <Button colorScheme="blue" onClick={handleApply}>
           적용
