@@ -6,6 +6,7 @@ import Header from './components/Header';
 import ConnectType from './components/ConnectType';
 import Address from './components/Address';
 import Parking from './components/Parking';
+import UploadCertificates from "./components/UploadCertificates.jsx";
 
 const initialChargingStationList = [
   { statId: 1, name: 'Station1', address: '서울 영등포구 가마산로 323 상세주소', connector: 'Type1', slot: '10 chargers' },
