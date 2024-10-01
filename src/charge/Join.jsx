@@ -6,14 +6,13 @@ import PasswordInput from './components/PasswordInput';
 import ChooseOne from './components/ChooseOne';
 import elecsearch from '../assets/elecsearch.png';
 
-
 function Join() {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
-    userType: 'option1'
+    userType: 'user' // 기본값을 'user'로 설정
   });
 
   const [errors, setErrors] = useState({});
@@ -156,11 +155,11 @@ function Join() {
       address: formData.address || null,
       phoneNumber: formData.phoneNumber || null,
       connectorType: formData.connectType || null,
-      isAdmin: false
+      userType: formData.userType // 유저 타입을 추가
     };
 
     try {
-      const response = await fetch('http://34.47.120.150:8080/users/register', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

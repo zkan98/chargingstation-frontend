@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Table, Thead, Tbody, Tr, Th, Td, Heading, Link } from '@chakra-ui/react';
-import axiosInstance from "../../api/axios.js";
-
+import axiosInstance from "../../api/axiosInstance.js";
 const ApprovalList = () => {
   const [data, setData] = useState([]);
   const [ownerId, setOwnerId] = useState(null);

@@ -1,18 +1,17 @@
+// src/pages/Owner.jsx
+import axiosInstance from "../api/axiosInstance.js";
 import { useState, useEffect } from 'react';
 import { Box, Button, Flex, VStack, Text, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react';
 import OwnerTable from './components/OwnerTable';
 import OwnerInput from './components/Input';
 import Header from './components/Header';
-import ConnectType from './components/ConnectType';
 import Address from './components/Address';
 import Parking from './components/Parking';
-import UploadCertificates from "./components/UploadCertificates.jsx";
+import ConnectorCard from './components/ConnectorCard';
+import KwCard from './components/KwCard';
+import LocationCard from './components/LocationCard';
 
-const initialChargingStationList = [
-  { statId: 1, name: 'Station1', address: '서울 영등포구 가마산로 323 상세주소', connector: 'Type1', slot: '10 chargers' },
-  { statId: 2, name: 'Station2', address: 'Location2', connector: 'Type2', slot: '20 chargers' }
-];
-
+// 충전기 타입 매핑
 const chgerTypeMap = {
   '01': 'DC차데모',
   '02': 'AC완속',
@@ -35,8 +34,32 @@ const Owner = () => {
     price: '',
     connector: '',
     speed: '',
+    location: '',
     parkingFee: ''
   });
+
+  const [isConnectorOpen, setIsConnectorOpen] = useState(false);
+  const [isSpeedOpen, setIsSpeedOpen] = useState(false);
+  const [isLocationOpen, setIsLocationOpen] = useState(false);
+
+  // 각 선택된 값 저장하는 상태
+  const [selectedConnector, setSelectedConnector] = useState(null);
+  const [selectedSpeed, setSelectedSpeed] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
+  useEffect(() => {
+    fetchChargingStations(); // 컴포넌트가 로드될 때 충전소 목록을 불러옴
+  }, []);
+
+  const fetchChargingStations = async () => {
+    try {
+      const response = await axiosInstance.get(`/charger/ownerList`);
+      setChargingStations(response.data); // 목록을 상태로 설정
+    } catch (error) {
+      console.error('Error fetching charging stations:', error);
+      alert(error.response?.data?.message || '충전소 목록을 불러오는 중 오류가 발생했습니다.');
+    }
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -60,175 +83,92 @@ const Owner = () => {
     }));
   };
 
-  const handleConnectTypeChange = (value) => {
+  const handleConnectorApply = (value) => {
+    setSelectedConnector(value);
     setInputValues((prevValues) => ({
       ...prevValues,
       connector: value
     }));
+    setIsConnectorOpen(false);
   };
 
-  const handleEdit = (item) => {
-    setInputValues({
-      statId: item.statId,
-      name: item.statNm,
-      address: item.address,
-      detailAddress: '',
-      price: item.price,
-      connector: item.connector,
-      speed: item.speed,
-      parkingFee: item.parkingFee
-    });
-    setSelectedView('editChargingStation');
+  const handleSpeedApply = (value) => {
+    setSelectedSpeed(value);
+    setInputValues((prevValues) => ({
+      ...prevValues,
+      speed: value
+    }));
+    setIsSpeedOpen(false);
+  };
+
+  const handleLocationApply = (value) => {
+    setSelectedLocation(value);
+    setInputValues((prevValues) => ({
+      ...prevValues,
+      location: value
+    }));
+    setIsLocationOpen(false);
   };
 
   const handleDelete = async (item) => {
     try {
-      // item.statId가 유효한지 확인
       if (!item.statId) {
         throw new Error('Invalid item statId');
       }
 
-      const response = await fetch(`http://34.47.120.150:8080/charger/place/deleteCharger`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ statId: item.statId.toString() }), // statId를 문자열로 변환
-      });
-
-      const result = await response.text(); // JSON이 아닌 텍스트로 처리
-
-      if (response.ok) {
-        setChargingStations(prevStations =>
-          prevStations.filter(station => station.statId !== item.statId) // statId로 필터링
-        );
-        alert(result); // 성공 메시지를 사용자에게 표시
-      } else {
-        console.error('Error deleting charger:', result);
-        alert('오류 발생: ' + result); // 오류 메시지 표시
-      }
+      await axiosInstance.delete(`/charger/place/deleteCharger/${item.statId}`);
+      alert('충전소가 성공적으로 삭제되었습니다.');
+      fetchChargingStations(); // 삭제 후 목록을 다시 불러옴
     } catch (error) {
       console.error('Error deleting charger:', error);
-      alert('오류 발생: ' + error.message); // 오류 메시지 표시
+      alert(error.response?.data?.message || '충전소 삭제 중 오류가 발생했습니다.');
     }
   };
 
   const handleSubmit = async () => {
-    const { statId, ...rest } = inputValues;
+    const { statId, name, address, detailAddress, price, connector, speed, location, parkingFee } = inputValues;
     const requestPayload = {
       statId: statId || '',
-      statNm: rest.name,
-      addr: rest.address,
-      chargingFee: parseFloat(rest.price) || 0.0,
-      output: rest.speed,
-      chgerType: Object.keys(chgerTypeMap).find(key => chgerTypeMap[key] === rest.connector) || '',
-      parkingFree: rest.parkingFee === '무료' ? 'Y' : 'N'
+      statNm: name,
+      addr: address,
+      detailAddr: detailAddress, // 상세 주소 추가
+      chargingFee: parseFloat(price) || 0.0,
+      output: speed,
+      chgerType: Object.keys(chgerTypeMap).find(key => chgerTypeMap[key] === connector) || '',
+      parkingFree: parkingFee === '무료' ? 'Y' : 'N'
     };
 
     try {
       let response;
       if (statId) {
-        response = await fetch(`http://34.47.120.150:8080/charger/place/updateCharger`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestPayload),
-        });
+        response = await axiosInstance.patch(`/charger/place/updateCharger/${statId}`, requestPayload);
       } else {
-        response = await fetch('http://34.47.120.150:8080/charger/place/addCharger', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestPayload),
-        });
+        response = await axiosInstance.post(`/charger/place/addCharger`, requestPayload);
       }
 
-      const result = await response.text(); // JSON이 아닌 텍스트로 처리
-      if (response.ok) {
-        alert(result); // 성공 메시지를 사용자에게 표시
-        if (statId) {
-          setChargingStations(prevStations =>
-            prevStations.map(station =>
-              station.statId === statId ? { ...inputValues } : station // statId로 업데이트
-            )
-          );
-        } else {
-          setChargingStations(prevStations => [
-            ...prevStations,
-            { statId: Date.now(), ...inputValues } // 새 충전소 추가 시 statId로 설정
-          ]);
-        }
-      } else {
-        console.error('Error submitting charger:', result);
-        alert('오류 발생: ' + result); // 오류 메시지 표시
-      }
+      alert(response.data.message || '성공적으로 처리되었습니다.');
+      fetchChargingStations(); // 충전소 추가/수정 후 목록을 다시 불러옴
+      setInputValues({
+        statId: '',
+        name: '',
+        address: '',
+        detailAddress: '',
+        price: '',
+        connector: '',
+        speed: '',
+        location: '',
+        parkingFee: ''
+      });
+      setSelectedConnector(null);
+      setSelectedSpeed(null);
+      setSelectedLocation(null);
     } catch (error) {
       console.error('Error submitting charger:', error);
-      alert('오류 발생: ' + error.message); // 오류 메시지 표시
-    }
-
-    setSelectedView('chargingStationList');
-  };
-
-  const renderContent = () => {
-    if (selectedView === 'chargingStationList') {
-      return (
-          <OwnerTable
-              data={chargingStations}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-          />
-      );
-    } else if (selectedView === 'addChargingStation') {
-      return (
-        <Flex align="center" justify="center" width="100%" height="100%" p={4}>
-          <VStack spacing={4} width="400px" bg="white" p={4} borderRadius="md">
-            <OwnerInput placeholder="충전소명" name="name" value={inputValues.name} onChange={handleInputChange} />
-            <Address setAddress={handleAddressChange} />
-            <Box border="1px solid" borderColor="gray.300" borderRadius="md" p={2} width="100%">
-              <Text fontSize="md" color="gray.600">
-                {inputValues.address || '기본 주소'}
-              </Text>
-            </Box>
-            <OwnerInput placeholder="상세 주소" name="detailAddress" value={inputValues.detailAddress} onChange={handleInputChange} />
-            <OwnerInput placeholder="kWh당 가격" name="price" value={inputValues.price} onChange={handleInputChange} />
-            <ConnectType placeholder="커넥트타입" name="connector" value={inputValues.connector} onChange={handleInputChange} />
-            <OwnerInput placeholder="충전속도" name="speed" value={inputValues.speed} onChange={handleInputChange} />
-            <Parking value={inputValues.parkingFee} onChange={handleParkingFeeChange} />
-            <Button colorScheme="blue" onClick={handleSubmit}>
-              {inputValues.statId ? '수정' : '추가'}
-            </Button>
-          </VStack>
-        </Flex>
-      );
-    } else if (selectedView === 'editChargingStation') {
-      return (
-        <Flex align="center" justify="center" width="100%" height="100%" p={4}>
-          <VStack spacing={4} width="400px" bg="white" p={4} borderRadius="md">
-            <OwnerInput placeholder="충전소명" name="name" value={inputValues.name} onChange={handleInputChange} />
-            <Address setAddress={handleAddressChange} />
-            <Box border="1px solid" borderColor="gray.300" borderRadius="md" p={2} width="100%">
-              <Text fontSize="md" color="gray.600">
-                {inputValues.address || '기본 주소'}
-              </Text>
-            </Box>
-            <OwnerInput placeholder="상세 주소" name="detailAddress" value={inputValues.detailAddress} onChange={handleInputChange} />
-            <OwnerInput placeholder="kWh당 가격" name="price" value={inputValues.price} onChange={handleInputChange} />
-            <ConnectType placeholder="커넥트타입" name="connector" value={inputValues.connector} onChange={handleInputChange} />
-            <OwnerInput placeholder="충전속도" name="speed" value={inputValues.speed} onChange={handleInputChange} />
-            <Parking value={inputValues.parkingFee} onChange={handleParkingFeeChange} />
-            <Button colorScheme="blue" onClick={handleSubmit}>
-              수정
-            </Button>
-          </VStack>
-        </Flex>
-      );
-    } else {
-      return <Box></Box>;
+      alert(error.response?.data?.message || '충전소 제출 중 오류가 발생했습니다.');
     }
   };
+
+  const isSubmitDisabled = !inputValues.name || !inputValues.address || !inputValues.connector || !inputValues.speed;
 
   return (
       <Box minH="100vh">
@@ -237,15 +177,8 @@ const Owner = () => {
             isFitted
             variant='enclosed'
             onChange={(index) => {
-              if (index === 1) {
-                setSelectedView('addChargingStation');
-              } else if (index === 2) {
-                setSelectedView('editChargingStation');
-              } else if (index === 3) {
-                setSelectedView('uploadCertificates');
-              } else {
-                setSelectedView('chargingStationList');
-              }
+              const views = ['chargingStationList', 'addChargingStation', 'editChargingStation', 'uploadCertificates'];
+              setSelectedView(views[index]);
             }}
         >
           <TabList mb='1em'>
@@ -256,16 +189,96 @@ const Owner = () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              {selectedView === 'chargingStationList' && renderContent()}
+              <OwnerTable data={chargingStations} onDelete={handleDelete} />
             </TabPanel>
             <TabPanel>
-              {selectedView === 'addChargingStation' && renderContent()}
+              <Flex align="center" justify="center" width="100%" height="100%" p={4}>
+                <VStack spacing={4} width="400px" bg="white" p={4} borderRadius="md" boxShadow="md">
+                  <OwnerInput
+                      placeholder="충전소명"
+                      name="name"
+                      value={inputValues.name}
+                      onChange={handleInputChange}
+                  />
+                  <Address setAddress={handleAddressChange} />
+                  <Box border="1px solid" borderColor="gray.300" borderRadius="md" p={2} width="100%">
+                    <Text fontSize="md" color="gray.600">{inputValues.address || '기본 주소'}</Text>
+                  </Box>
+                  <OwnerInput
+                      placeholder="상세 주소"
+                      name="detailAddress"
+                      value={inputValues.detailAddress}
+                      onChange={handleInputChange}
+                  />
+                  <OwnerInput
+                      placeholder="kWh당 가격"
+                      name="price"
+                      type="number"
+                      value={inputValues.price}
+                      onChange={handleInputChange}
+                  />
+
+                  {/* 커넥터 선택 버튼 */}
+                  <Button onClick={() => setIsConnectorOpen(true)} colorScheme="teal" width="100%">
+                    커넥터 선택
+                  </Button>
+                  {isConnectorOpen && (
+                      <ConnectorCard
+                          onClose={() => setIsConnectorOpen(false)}
+                          onApply={handleConnectorApply}  // 커넥터 적용 핸들러
+                      />
+                  )}
+                  {selectedConnector && <Text>선택된 커넥터: {selectedConnector}</Text>}
+
+                  {/* 충전속도 선택 버튼 */}
+                  <Button onClick={() => setIsSpeedOpen(true)} colorScheme="teal" width="100%">
+                    충전속도 선택
+                  </Button>
+                  {isSpeedOpen && (
+                      <KwCard
+                          onClose={() => setIsSpeedOpen(false)}
+                          onApply={handleSpeedApply}  // 충전속도 적용 핸들러
+                      />
+                  )}
+                  {selectedSpeed && <Text>선택된 충전속도: {selectedSpeed}kW</Text>}
+
+                  {/* 장소 선택 버튼 */}
+                  <Button onClick={() => setIsLocationOpen(true)} colorScheme="teal" width="100%">
+                    장소 선택
+                  </Button>
+                  {isLocationOpen && (
+                      <LocationCard
+                          onClose={() => setIsLocationOpen(false)}
+                          onApply={handleLocationApply}  // 장소 적용 핸들러
+                      />
+                  )}
+                  {selectedLocation && <Text>선택된 장소: {selectedLocation}</Text>}
+
+                  <Parking value={inputValues.parkingFee} onChange={handleParkingFeeChange} />
+
+                  {/* 추가 또는 수정 버튼 */}
+                  <Button
+                      colorScheme="blue"
+                      onClick={handleSubmit}
+                      isDisabled={isSubmitDisabled} // 필수 값들이 입력되지 않으면 비활성화
+                      width="100%"
+                  >
+                    {inputValues.statId ? '수정' : '추가'}
+                  </Button>
+
+                  {/* 선택된 값 표시 */}
+                  <Text mt={4}>선택된 커넥터: {selectedConnector || '선택되지 않음'}</Text>
+                  <Text>선택된 충전속도: {selectedSpeed || '선택되지 않음'}</Text>
+                  <Text>선택된 장소: {selectedLocation || '선택되지 않음'}</Text>
+                </VStack>
+              </Flex>
+            </TabPanel>
+            {/* 나머지 TabPanels에 대한 구현 필요 */}
+            <TabPanel>
+              <Text>충전소 수정 기능은 아직 구현되지 않았습니다.</Text>
             </TabPanel>
             <TabPanel>
-              {selectedView === 'editChargingStation' && renderContent()}
-            </TabPanel>
-            <TabPanel>
-              {selectedView === 'uploadCertificates' && <UploadCertificates />}
+              <Text>사업자 인증 기능은 아직 구현되지 않았습니다.</Text>
             </TabPanel>
           </TabPanels>
         </Tabs>

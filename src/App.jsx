@@ -17,11 +17,11 @@ function App() {
   return (
       <Router>
         <Routes>
-            <Route path="/" element={<Main />}>
-                <Route index element={<Charge />} />
-                <Route path="charge/place/:statId" element={<ChargeDetail />} />
-            </Route>
-            <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Main />}>
+            <Route index element={<Charge />} />
+            <Route path="/charge/place/:statId" element={<ChargeDetail />} />
+          </Route>
+          <Route path="/login" element={<Login />} />
             <Route path="/join" element={<Join />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/admin" element={<Admin />} />

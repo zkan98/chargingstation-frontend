@@ -46,7 +46,7 @@ const MapView = memo(({ setChargerData, center, zoomLevel }) => {
 
         try {
           const queryParams = new URLSearchParams(filters).toString();
-          const response = await fetch(`http://34.47.120.150:8080/charger/list?${queryParams}`, {
+          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/charger/list?${queryParams}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

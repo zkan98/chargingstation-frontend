@@ -26,7 +26,7 @@ function MyPage() {
     useEffect(() => {
         const fetchUserData = async () => {
           const token = getCookie('accessToken');
-          const response = await fetch('http://34.47.120.150:8080/users/info', {
+          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/info`, {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
@@ -63,7 +63,7 @@ function MyPage() {
     const handleSave = async () => {
         try {
           const token = getCookie('accessToken');
-          const response = await fetch('http://34.47.120.150:8080/users/mypage/update', {
+          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/mypage/update`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ function MyPage() {
         if (confirmDelete) {
           try {
             const token = getCookie('accessToken');
-            const response = await fetch('http://34.47.120.150:8080/users/mypage/delete', {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/mypage/delete`, {
               method: 'DELETE',
               headers: {
                 'Authorization': `Bearer ${token}`

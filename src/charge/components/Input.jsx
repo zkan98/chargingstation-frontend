@@ -20,22 +20,4 @@ const UserInput = ({ placeholder, name, value, onChange, isInvalid, errorMessage
 };
 
 
-// function UserInput({ placeholder, isReadOnly }) {
-//   const [inputValue, setInputValue] = useState('');
-//
-//   const handleInputChange = (event) => {
-//     setInputValue(event.target.value);
-//   };
-//
-//   return (
-//     <Input
-//       placeholder={placeholder}
-//       value={inputValue}
-//       onChange={handleInputChange}
-//       width="100%"
-//       isReadOnly={isReadOnly}
-//     />
-//   );
-// }
-
 export default UserInput;
